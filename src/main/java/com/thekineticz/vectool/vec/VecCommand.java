@@ -24,7 +24,7 @@ abstract class VecCommand{
      */
     public String getArgs(){
         return args;
-    };
+    }
 
     /**
      * Returns the command represented by the class as a fully-formed VEC command string.
@@ -34,5 +34,5 @@ abstract class VecCommand{
     @Override
     public String toString(){
         return String.format("%s %s", commandType.name(), args);
-    };
+    }
 }

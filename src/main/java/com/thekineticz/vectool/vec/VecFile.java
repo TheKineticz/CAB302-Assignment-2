@@ -35,11 +35,11 @@ public class VecFile {
         commands.add(command);
 
         if (command.getCommandType() == Commands.Type.PEN){
-            latestPenColour = command.getArgs().get(0).toString();
+            latestPenColour = command.getArgs();
         }
 
         else if (command.getCommandType() == Commands.Type.FILL){
-            latestFillColour = command.getArgs().get(0).toString();
+            latestFillColour = command.getArgs();
         }
     }
 
@@ -71,12 +71,12 @@ public class VecFile {
 
             if (current.getCommandType() == Commands.Type.PEN) {
                 isPenColourFound = true;
-                latestPenColour = current.getArgs().get(0).toString();
+                latestPenColour = current.getArgs();
             }
 
             else if (current.getCommandType() == Commands.Type.FILL) {
                 isFillColourFound = true;
-                latestFillColour = current.getArgs().get(0).toString();
+                latestFillColour = current.getArgs();
             }
 
             index--;
@@ -89,6 +89,33 @@ public class VecFile {
         if (!isFillColourFound){
             latestFillColour = "OFF";
         }
+    }
+
+    /**
+     * Gets the name of the VEC file.
+     *
+     * @return The name of the VEC file.
+     */
+    public String getFilename(){
+        return filename;
+    }
+
+    /**
+     * Gets the latest pen colour that was set, in 6-digit hexadecimal string form.
+     *
+     * @return The colour.
+     */
+    public String getLatestPenColour(){
+        return latestPenColour;
+    }
+
+    /**
+     * Gets the latest fill colour that was set as 'OFF' or a colour in 6-digit hexadecimal string form.
+     *
+     * @return The colour or the string 'OFF'.
+     */
+    public String getLatestFillColour(){
+        return latestFillColour;
     }
 
 }

@@ -6,17 +6,16 @@ import java.util.regex.Pattern;
 /**
  * Regex pattern matcher for validating hexadecimal colour strings.
  */
-public class ColourValidator{
+class ColourValidator{
 
     private Pattern pattern;
-    private Matcher matcher;
 
     private static final String WEB_COLOUR_PATTERN = "^#([A-Fa-f0-9]{6})$";
 
     /**
      * Create a new ColourValidator.
      */
-    public ColourValidator(){
+    ColourValidator(){
         pattern = Pattern.compile(WEB_COLOUR_PATTERN);
     }
 
@@ -26,7 +25,8 @@ public class ColourValidator{
      * @param colour The input string.
      * @return Whether the input string is valid.
      */
-    public boolean validate(String colour){
+    boolean isValid(String colour){
+        Matcher matcher;
         matcher = pattern.matcher(colour);
         return matcher.matches();
     }

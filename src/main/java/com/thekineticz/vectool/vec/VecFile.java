@@ -9,10 +9,10 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
-    String filename;
-    ArrayList<VecCommand> commands;
-    String latestPenColour;
-    String latestFillColour;
+    private String filename;
+    private ArrayList<VecCommand> commands;
+    private String latestPenColour;
+    private String latestFillColour;
 
     /**
      * Creates a new internal VEC class with default values.

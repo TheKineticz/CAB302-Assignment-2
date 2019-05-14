@@ -11,7 +11,6 @@ public class ColourCommand implements VecCommand<String>{
 
     private Commands.Type commandType;
     private ArrayList<String> args = new ArrayList<>();
-    private ColourValidator colourValidator = new ColourValidator();
 
     /**
      * Creates a new colour command.
@@ -21,13 +20,15 @@ public class ColourCommand implements VecCommand<String>{
      * @throws VecCommandException If commandType is not PEN or FILL, or the value for arg is invalid.
      */
     public ColourCommand(Commands.Type commandType, String arg) throws VecCommandException{
+        ColourValidator colourValidator = new ColourValidator();
+
         if (!Commands.COLOUR_COMMAND_TYPES.contains(commandType)){
             throw new VecCommandException(commandType.name() + " is an invalid command type for ColourCommand.");
         }
 
         if (commandType == Commands.Type.PEN){
             this.commandType = commandType;
-            if(!colourValidator.validate(arg)){
+            if(!colourValidator.isValid(arg)){
                 throw new VecCommandException(arg + " is an invalid 6-digit hexadecimal colour string.");
             }
             args.add(arg);
@@ -35,7 +36,7 @@ public class ColourCommand implements VecCommand<String>{
 
         else if (commandType == Commands.Type.FILL){
             this.commandType = commandType;
-            if(arg != "OFF" || !colourValidator.validate(arg)){
+            if(!arg.equals("OFF") || !colourValidator.isValid(arg)){
                 throw new VecCommandException(arg + " is neither 'OFF' nor a valid 6-digit hexadecimal colour string.");
             }
             args.add(arg);

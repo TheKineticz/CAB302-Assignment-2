@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-public class Commands {
+class Commands {
 
     /**
      *  The types of commands that could be represented by a VecCommand class.
@@ -18,18 +18,18 @@ public class Commands {
      * Constructs a set containing all the commands of draw type.
      */
     private static final Type[] DRAW_COMMAND_TYPES_VALUES = new Type[] {Type.PLOT, Type.LINE, Type.RECTANGLE, Type.ELLIPSE, Type.POLYGON};
-    public static final Set<Type> DRAW_COMMAND_TYPES = new HashSet<>(Arrays.asList(DRAW_COMMAND_TYPES_VALUES));
+    static final Set<Type> DRAW_COMMAND_TYPES = new HashSet<>(Arrays.asList(DRAW_COMMAND_TYPES_VALUES));
 
     /**
      * Constructs a set containing all the commands of colour type.
      */
     private static final Type[] COLOUR_COMMAND_TYPES_VALUES = new Type[] {Type.PEN, Type.FILL};
-    public static final Set<Type> COLOUR_COMMAND_TYPES = new HashSet<>(Arrays.asList(COLOUR_COMMAND_TYPES_VALUES));
+    static final Set<Type> COLOUR_COMMAND_TYPES = new HashSet<>(Arrays.asList(COLOUR_COMMAND_TYPES_VALUES));
 
     /**
      * Constructs a map containing the required amount of position arguments for each corresponding draw command.
      */
-    public static final Map<Type, Integer> DRAW_COMMAND_POSITION_ARGUMENTS = Map.ofEntries(
+    static final Map<Type, Integer> DRAW_COMMAND_POSITION_ARGUMENTS = Map.ofEntries(
             Map.entry(Type.PLOT, 2),
             Map.entry(Type.LINE, 4),
             Map.entry(Type.RECTANGLE, 4),

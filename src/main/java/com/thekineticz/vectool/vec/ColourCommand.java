@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
- * The internal representation of a VEC command that does not draw anything
+ * The internal representation of a VEC command that does not draw anything, but effects the colour of things drawn after it.
  */
 public class ColourCommand implements VecCommand<String>{
 

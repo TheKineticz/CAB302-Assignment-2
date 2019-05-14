@@ -3,8 +3,6 @@ package com.thekineticz.vectool.vec;
 import com.thekineticz.vectool.exception.VecCommandException;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 /**
  * The internal representation of a VEC command that does not draw anything, but effects the colour of things drawn after it.
@@ -70,35 +68,5 @@ public class ColourCommand implements VecCommand<String>{
     @Override
     public String toString(){
         return String.format("%s %s", commandType.name(), args.get(0));
-    }
-}
-
-
-/**
- * Regex pattern matcher for validating hexadecimal colour strings.
- */
-class ColourValidator{
-
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String WEB_COLOUR_PATTERN = "^#([A-Fa-f0-9]{6})$";
-
-    /**
-     * Create a new ColourValidator.
-     */
-    public ColourValidator(){
-        pattern = Pattern.compile(WEB_COLOUR_PATTERN);
-    }
-
-    /**
-     * Validates that a given string is in the correct 6-digit hexadecimal format.
-     *
-     * @param colour The input string.
-     * @return Whether the input string is valid.
-     */
-    public boolean validate(String colour){
-        matcher = pattern.matcher(colour);
-        return matcher.matches();
     }
 }

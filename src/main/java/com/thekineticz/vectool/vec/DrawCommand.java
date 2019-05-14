@@ -5,9 +5,9 @@ import com.thekineticz.vectool.exception.VecCommandException;
 import java.util.ArrayList;
 
 /**
- * The internal representation of a VEC command that draws a figure.
+ * The internal representation of Aa VEC command that draws a figure.
  */
-public class DrawCommand extends VecCommand{
+public class DrawCommand extends VecCommand {
 
     private ArrayList<Double> positions;
 
@@ -39,14 +39,6 @@ public class DrawCommand extends VecCommand{
         }
 
         this.positions = positions;
-
-        StringBuilder stringPositions = new StringBuilder(positions.get(0).toString());
-        int i = 1;
-        while (i < positions.size()){
-            stringPositions.append(" ");
-            stringPositions.append(positions.get(i).toString());
-        }
-        args = stringPositions.toString();
     }
 
     /**
@@ -56,5 +48,20 @@ public class DrawCommand extends VecCommand{
      */
     public ArrayList<Double> getPositions(){
         return positions;
+    }
+
+    /**
+     * Gets the position arguments in string form.
+     *
+     * @return The position arguments in string form.
+     */
+    public String getArgs(){
+        StringBuilder stringPositions = new StringBuilder(positions.get(0).toString());
+        int i = 1;
+        while (i < positions.size()){
+            stringPositions.append(" ");
+            stringPositions.append(positions.get(i).toString());
+        }
+        return stringPositions.toString();
     }
 }

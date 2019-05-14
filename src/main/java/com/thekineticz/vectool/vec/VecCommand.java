@@ -3,10 +3,9 @@ package com.thekineticz.vectool.vec;
 /**
  * Represents a command that can exist in a VEC file.
  */
-abstract class VecCommand{
+abstract class VecCommand {
 
     Commands.Type commandType;
-    String args;
 
     /**
      * Gets the type of command represented by the class.
@@ -22,9 +21,7 @@ abstract class VecCommand{
      *
      * @return The arguments of the command represented by the class in string form.
      */
-    public String getArgs(){
-        return args;
-    }
+    public abstract String getArgs();
 
     /**
      * Returns the command represented by the class as a fully-formed VEC command string.
@@ -33,6 +30,6 @@ abstract class VecCommand{
      */
     @Override
     public String toString(){
-        return String.format("%s %s", commandType.name(), args);
+        return String.format("%s %s", commandType.name(), getArgs());
     }
 }

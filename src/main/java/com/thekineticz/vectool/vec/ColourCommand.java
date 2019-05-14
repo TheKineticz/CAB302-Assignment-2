@@ -5,7 +5,7 @@ import com.thekineticz.vectool.exception.VecCommandException;
 /**
  * The internal representation of a VEC command that does not draw anything, but effects the colour of things drawn after it.
  */
-public class ColourCommand extends VecCommand{
+public class ColourCommand extends VecCommand {
 
     private String colour;
 
@@ -38,8 +38,6 @@ public class ColourCommand extends VecCommand{
             }
             this.colour = colour;
         }
-
-        this.args = colour;
     }
 
     /**
@@ -47,7 +45,7 @@ public class ColourCommand extends VecCommand{
      *
      * @return The colour string.
      */
-    public String getColour(){
+    public String getArgs(){
         return colour;
     }
 }

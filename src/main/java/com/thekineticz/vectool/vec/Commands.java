@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Container for command-related objects.
+ */
 class Commands {
 
     /**

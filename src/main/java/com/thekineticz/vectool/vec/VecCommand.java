@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *  The types of commands that could be represented by a VecCommand class.
  */
 enum CommandType{
-    LINE, PLOT, RECTANGLE, ELLIPSE, POLYGON, PEN, FILL
+    PLOT, LINE, RECTANGLE, ELLIPSE, POLYGON, PEN, FILL
 }
 
 /**

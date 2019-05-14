@@ -34,11 +34,11 @@ public class VecFile {
     public void addCommand(VecCommand command){
         commands.add(command);
 
-        if (command.getCommandType() == CommandType.PEN){
+        if (command.getCommandType() == Commands.Type.PEN){
             latestPenColour = command.getArgs().get(0).toString();
         }
 
-        else if (command.getCommandType() == CommandType.FILL){
+        else if (command.getCommandType() == Commands.Type.FILL){
             latestFillColour = command.getArgs().get(0).toString();
         }
     }
@@ -69,12 +69,12 @@ public class VecFile {
         while ( index >= 0 && (!isPenColourFound || !isFillColourFound)){
             VecCommand current = commands.get(index);
 
-            if (current.getCommandType() == CommandType.PEN) {
+            if (current.getCommandType() == Commands.Type.PEN) {
                 isPenColourFound = true;
                 latestPenColour = current.getArgs().get(0).toString();
             }
 
-            else if (current.getCommandType() == CommandType.FILL) {
+            else if (current.getCommandType() == Commands.Type.FILL) {
                 isFillColourFound = true;
                 latestFillColour = current.getArgs().get(0).toString();
             }

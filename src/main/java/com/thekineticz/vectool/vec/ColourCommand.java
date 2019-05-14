@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
  */
 public class ColourCommand implements VecCommand<String>{
 
-    private CommandType commandType;
+    private Commands.Type commandType;
     private ArrayList<String> args = new ArrayList<>();
     private ColourValidator colourValidator = new ColourValidator();
 
@@ -22,8 +22,12 @@ public class ColourCommand implements VecCommand<String>{
      * @param arg The colour argument of the command. Must be a valid 6-digit hexadecimal string with leading #, or 'OFF' if the command is type FILL.
      * @throws VecCommandException If commandType is not PEN or FILL, or the value for arg is invalid.
      */
-    public ColourCommand(CommandType commandType, String arg) throws VecCommandException{
-        if (commandType == CommandType.PEN){
+    public ColourCommand(Commands.Type commandType, String arg) throws VecCommandException{
+        if (!Commands.COLOUR_COMMAND_TYPES.contains(commandType)){
+            throw new VecCommandException(commandType.name() + " is an invalid command type for ColourCommand.");
+        }
+
+        if (commandType == Commands.Type.PEN){
             this.commandType = commandType;
             if(!colourValidator.validate(arg)){
                 throw new VecCommandException(arg + " is an invalid 6-digit hexadecimal colour string.");
@@ -31,16 +35,12 @@ public class ColourCommand implements VecCommand<String>{
             args.add(arg);
         }
 
-        else if (commandType == CommandType.FILL){
+        else if (commandType == Commands.Type.FILL){
             this.commandType = commandType;
             if(arg != "OFF" || !colourValidator.validate(arg)){
                 throw new VecCommandException(arg + " is neither 'OFF' nor a valid 6-digit hexadecimal colour string.");
             }
             args.add(arg);
-        }
-
-        else {
-            throw new VecCommandException(commandType.name() + " is an invalid command type for ColourCommand.");
         }
     }
 
@@ -49,7 +49,7 @@ public class ColourCommand implements VecCommand<String>{
      *
      * @return The command type.
      */
-    public CommandType getCommandType(){
+    public Commands.Type getCommandType(){
         return commandType;
     }
 

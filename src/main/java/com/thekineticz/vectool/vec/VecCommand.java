@@ -3,13 +3,6 @@ package com.thekineticz.vectool.vec;
 import java.util.ArrayList;
 
 /**
- *  The types of commands that could be represented by a VecCommand class.
- */
-enum CommandType{
-    PLOT, LINE, RECTANGLE, ELLIPSE, POLYGON, PEN, FILL
-}
-
-/**
  * Represents a command that can exist in a VEC file.
  *
  * @param <T> The type of argument passed to the command.
@@ -20,7 +13,7 @@ public interface VecCommand<T> {
      *
      * @return The command type represented by the class.
      */
-    CommandType getCommandType();
+    Commands.Type getCommandType();
 
     /**
      * Gets the arguments of the command represented by the class.

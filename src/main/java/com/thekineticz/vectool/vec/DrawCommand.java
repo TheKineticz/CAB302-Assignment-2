@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class DrawCommand implements VecCommand{
 
-    private CommandType commandType;
+    private Commands.Type commandType;
     private ArrayList<Double> args;
 
     /**
@@ -19,50 +19,27 @@ public class DrawCommand implements VecCommand{
      * @param args The position arguments of the object that is to be drawn.
      * @throws VecCommandException Thrown when commandType is invalid or when the number of position arguments does not match the specification for the given command.
      */
-    public DrawCommand(CommandType commandType, ArrayList<Double> args) throws VecCommandException {
-        if (commandType == CommandType.PLOT){
-            this.commandType = commandType;
-            if (args.size() != 2){
-                throw new VecCommandException("Command of type PLOT must have exactly 2 position arguments.");
-            }
-            this.args = args;
+    public DrawCommand(Commands.Type commandType, ArrayList<Double> args) throws VecCommandException {
+        if (!Commands.DRAW_COMMAND_TYPES.contains(commandType)){
+            throw new VecCommandException(commandType.name() + " is an invalid command type for DrawCommand.");
         }
 
-        else if (commandType == CommandType.LINE){
-            this.commandType = commandType;
-            if (args.size() != 4){
-                throw new VecCommandException("Command of type LINE must have exactly 4 position arguments.");
-            }
-            this.args = args;
-        }
+        this.commandType = commandType;
 
-        else if (commandType == CommandType.RECTANGLE){
-            this.commandType = commandType;
-            if (args.size() != 4){
-                throw new VecCommandException("Command of type RECTANGLE must have exactly 4 position arguments.");
+        if (commandType == Commands.Type.POLYGON){
+            if (args.isEmpty() || args.size() % 2 != 0){
+                throw new VecCommandException("Draw command of type POLYGON must contain at least two position arguments, and must have an even number of arguments.");
             }
-            this.args = args;
-        }
-
-        else if (commandType == CommandType.ELLIPSE){
-            this.commandType = commandType;
-            if (args.size() != 4){
-                throw new VecCommandException("Command of type ELLIPSE must have exactly 4 position arguments.");
-            }
-            this.args = args;
-        }
-
-        else if (commandType == CommandType.POLYGON){
-            this.commandType = commandType;
-            if (args.size() % 2 != 0){
-                throw new VecCommandException("Command of type POLYGON must have an even number of position arguments.");
-            }
-            this.args = args;
         }
 
         else {
-            throw new VecCommandException(commandType.name() + " is an invalid command type for DrawCommand.");
+            Integer nRequiredArguments = Commands.DRAW_COMMAND_POSITION_ARGUMENTS.get(commandType);
+            if (args.size() != nRequiredArguments){
+                throw new VecCommandException(String.format("Draw command of type %s must contain exactly %d position arguments.", commandType.name(), nRequiredArguments));
+            }
         }
+
+        this.args = args;
     }
 
     /**
@@ -70,7 +47,7 @@ public class DrawCommand implements VecCommand{
      *
      * @return The type of draw command.
      */
-    public CommandType getCommandType(){
+    public Commands.Type getCommandType(){
         return commandType;
     }
 

@@ -5,7 +5,16 @@ package com.thekineticz.vectool.vec;
  */
 abstract class VecCommand {
 
-    Commands.Type commandType;
+    private Commands.Type commandType;
+
+    /**
+     * Creates a new VecCommand with the command type initialised.
+     *
+     * @param commandType The type of command to be represented.
+     */
+    VecCommand(Commands.Type commandType){
+        this.commandType = commandType;
+    }
 
     /**
      * Gets the type of command represented by the class.

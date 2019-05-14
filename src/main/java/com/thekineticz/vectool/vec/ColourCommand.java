@@ -17,6 +17,8 @@ public class ColourCommand extends VecCommand {
      * @throws VecCommandException If commandType is not PEN or FILL, or the value for arg is invalid.
      */
     public ColourCommand(Commands.Type commandType, String colour) throws VecCommandException{
+        super(commandType);
+
         ColourValidator colourValidator = new ColourValidator();
 
         if (!Commands.COLOUR_COMMAND_TYPES.contains(commandType)){
@@ -24,7 +26,6 @@ public class ColourCommand extends VecCommand {
         }
 
         if (commandType == Commands.Type.PEN){
-            this.commandType = commandType;
             if(!colourValidator.isValid(colour)){
                 throw new VecCommandException(colour + " is an invalid 6-digit hexadecimal colour string.");
             }
@@ -32,7 +33,6 @@ public class ColourCommand extends VecCommand {
         }
 
         else if (commandType == Commands.Type.FILL){
-            this.commandType = commandType;
             if(!colour.equals("OFF") || !colourValidator.isValid(colour)){
                 throw new VecCommandException(colour + " is neither 'OFF' nor a valid 6-digit hexadecimal colour string.");
             }

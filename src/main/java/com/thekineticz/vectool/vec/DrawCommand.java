@@ -19,11 +19,11 @@ public class DrawCommand extends VecCommand {
      * @throws VecCommandException Thrown when commandType is invalid or when the number of position arguments does not match the specification for the given command.
      */
     public DrawCommand(Commands.Type commandType, ArrayList<Double> positions) throws VecCommandException {
+        super(commandType);
+
         if (!Commands.DRAW_COMMAND_TYPES.contains(commandType)){
             throw new VecCommandException(commandType.name() + " is an invalid command type for DrawCommand.");
         }
-
-        this.commandType = commandType;
 
         if (commandType == Commands.Type.POLYGON){
             if (positions.isEmpty() || positions.size() % 2 != 0){

@@ -15,7 +15,6 @@ enum CommandType{
  * @param <T> The type of argument passed to the command.
  */
 public interface VecCommand<T> {
-
     /**
      * Gets the type of command represented by the class.
      *
@@ -36,5 +35,4 @@ public interface VecCommand<T> {
      * @return The fully-formed command represented by the class.
      */
     String toString();
-
 }

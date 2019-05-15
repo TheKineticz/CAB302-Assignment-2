@@ -66,7 +66,7 @@ public class VecFile {
         boolean isPenColourFound = false;
         boolean isFillColourFound = false;
 
-        while ( index >= 0 && (!isPenColourFound || !isFillColourFound)){
+        while (index >= 0 && (!isPenColourFound || !isFillColourFound)){
             VecCommand current = commands.get(index);
 
             if (current.getCommandType() == Commands.Type.PEN) {

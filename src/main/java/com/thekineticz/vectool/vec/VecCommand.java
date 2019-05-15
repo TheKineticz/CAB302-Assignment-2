@@ -3,7 +3,7 @@ package com.thekineticz.vectool.vec;
 /**
  * Represents a command that can exist in a VEC file.
  */
-abstract class VecCommand {
+public abstract class VecCommand {
 
     private Commands.Type commandType;
 

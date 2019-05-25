@@ -1,5 +1,8 @@
 package com.thekineticz.vectool.vec;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -9,17 +12,34 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
+    private static final String fileExtension = "vec";
+
+    private String directory;
     private String filename;
     private ArrayList<VecCommand> commands;
     private String latestPenColour;
     private String latestFillColour;
 
     /**
-     * Creates a new internal VEC class with default values.
+     * Creates an internal VEC class from a file.
+     *
+     * @param directory The directory of the VEC file that is being imported.
+     * @param filename The filename of the VEC file that is being imported.
+     */
+    public VecFile(String directory, String filename){
+        this.directory = directory;
+        this.filename = filename;
+        commands = new ArrayList<>();
+        //TODO: Implement vec file importing
+    }
+
+    /**
+     * Creates a brand new internal VEC class.
      *
      * @param filename The filename of the VEC file that is being created.
      */
     public VecFile(String filename){
+        this.directory = null;
         this.filename = filename;
         commands = new ArrayList<>();
         latestPenColour = "#000000";
@@ -59,6 +79,60 @@ public class VecFile {
     }
 
     /**
+     * Saves the current state of the VecFile to it's stored filepath.
+     */
+    public void save(){
+        writeToFile(directory, filename);
+    }
+
+    /**
+     * Saves the current state of the VecFile to a new filepath.
+     *
+     * @param directory The directory where the file will be saved to.
+     * @param filename The name of the file, not including extension.
+     */
+    public void saveAs(String directory, String filename){
+        writeToFile(directory, filename);
+    }
+
+    /**
+     * Writes the current state of the VecFile to a file.
+     *
+     * @param directory The directory where the file will be saved to.
+     * @param filename The name of the file, not including extension.
+     */
+    private void writeToFile(String directory, String filename){
+        String filePath = String.format("%s/%s.%s", directory, filename, fileExtension);
+
+        BufferedWriter bufferedWriter = null;
+
+        try{
+            bufferedWriter = new BufferedWriter(new FileWriter(filePath));
+
+            for (VecCommand command : commands){
+                bufferedWriter.write(command.toString());
+                bufferedWriter.newLine();
+            }
+
+            bufferedWriter.close();
+        }
+
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        finally{
+            try{
+                bufferedWriter.close();
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
      * Updates the latest colour fields with the current values derived from the commands array.
      */
     private void updateLatestColours(){
@@ -66,7 +140,7 @@ public class VecFile {
         boolean isPenColourFound = false;
         boolean isFillColourFound = false;
 
-        while (index >= 0 && (!isPenColourFound || !isFillColourFound)){
+        while (index >= 0 && !(isPenColourFound && isFillColourFound)){
             VecCommand current = commands.get(index);
 
             if (current.getCommandType() == Commands.Type.PEN) {

@@ -1,6 +1,10 @@
 package com.thekineticz.vectool.vec;
 
+import com.thekineticz.vectool.exception.VecCommandException;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +24,8 @@ public class VecFile {
     private String directory;
     private String filename;
     private ArrayList<VecCommand> commands;
-    private String latestPenColour;
-    private String latestFillColour;
+    private String latestPenColour = DEFAULT_PEN_COLOUR;
+    private String latestFillColour = DEFAULT_FILL_COLOUR;
 
     /**
      * Creates an internal VEC class from a file.
@@ -33,7 +37,8 @@ public class VecFile {
         this.directory = directory;
         this.filename = filename;
         commands = new ArrayList<>();
-        //TODO: Implement vec file importing
+        importFromFile(directory, filename);
+        updateLatestColours();
     }
 
     /**
@@ -45,8 +50,6 @@ public class VecFile {
         this.directory = null;
         this.filename = filename;
         commands = new ArrayList<>();
-        latestPenColour = DEFAULT_PEN_COLOUR;
-        latestFillColour = DEFAULT_FILL_COLOUR;
     }
 
     /**
@@ -55,15 +58,27 @@ public class VecFile {
      * @param command The new command.
      */
     public void addCommand(VecCommand command){
-        commands.add(command);
-
         //If the command is a pen or fill command, record their colour values as latest
         if (command.getCommandType() == Commands.Type.PEN){
-            latestPenColour = command.getArgs();
+            String colour = command.getArgs();
+
+            if (!latestPenColour.equals(colour)){
+                latestPenColour = colour;
+                commands.add(command);
+            }
         }
 
         else if (command.getCommandType() == Commands.Type.FILL){
-            latestFillColour = command.getArgs();
+            String colour = command.getArgs();
+
+            if (!latestFillColour.equals(colour)){
+                latestFillColour = colour;
+                commands.add(command);
+            }
+        }
+
+        else {
+            commands.add(command);
         }
     }
 
@@ -88,7 +103,7 @@ public class VecFile {
      * Saves the current state of the VecFile to it's stored filepath.
      */
     public void save(){
-        writeToFile(directory, filename);
+        exportToFile(directory, filename);
     }
 
     /**
@@ -98,7 +113,7 @@ public class VecFile {
      * @param filename The name of the file, not including extension.
      */
     public void saveAs(String directory, String filename){
-        writeToFile(directory, filename);
+        exportToFile(directory, filename);
     }
 
     /**
@@ -107,25 +122,25 @@ public class VecFile {
      * @param directory The directory where the file will be saved to.
      * @param filename The name of the file, not including extension.
      */
-    private void writeToFile(String directory, String filename){
+    private void exportToFile(String directory, String filename){
         String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
 
-        BufferedWriter bufferedWriter = null;
+        BufferedWriter writer = null;
 
         //Try to write all the commands in their string form to a new line in the file
-        try{
-            bufferedWriter = new BufferedWriter(new FileWriter(filePath));
+        try {
+            writer = new BufferedWriter(new FileWriter(filePath));
 
             if (!commands.isEmpty()){
-                bufferedWriter.write(commands.get(0).toString());
+                writer.write(commands.get(0).toString());
 
                 for (int i = 1; i < commands.size(); i++){
-                    bufferedWriter.newLine();
-                    bufferedWriter.write(commands.get(i).toString());
+                    writer.newLine();
+                    writer.write(commands.get(i).toString());
                 }
             }
 
-            bufferedWriter.close();
+            writer.close();
         }
 
         catch (IOException e){
@@ -133,15 +148,110 @@ public class VecFile {
         }
 
         //Ensure the file is closed properly if an error occurs
-        finally{
-            try{
-                bufferedWriter.close();
+        finally {
+            try {
+                if (writer != null){
+                    writer.close();
+                }
             }
+
             catch (IOException e){
                 e.printStackTrace();
             }
         }
 
+    }
+
+    /**
+     * Generates a complete VecFile from an external file.
+     *
+     * @param directory The directory of the vec file.
+     * @param filename The filename not including extension of the vec file.
+     */
+    private void importFromFile(String directory, String filename){
+        String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(filePath));
+
+            String line = reader.readLine();
+            while (line != null){
+                try {
+                    VecCommand command = generateVecCommandFromString(line);
+                    commands.add(command);
+                }
+                catch (VecCommandException e){
+                    e.printStackTrace();
+                }
+
+                line = reader.readLine();
+            }
+        }
+
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Generates a VecCommand from a vec command in string form.
+     *
+     * @param commandString The full string of the command.
+     * @return An initialised VecCommand.
+     * @throws VecCommandException Thrown when some issue occurs when parsing.
+     */
+    private VecCommand generateVecCommandFromString(String commandString) throws VecCommandException {
+        String[] commandArray = commandString.split(" ");
+
+        if (commandArray.length == 0){
+            throw new VecCommandException("Attempted to parse VecCommand from empty String.");
+        }
+
+        Commands.Type commandType;
+        VecCommand command;
+
+        //Try to get the command type from the string
+        try {
+            commandType = Commands.Type.valueOf(commandArray[0]);
+        }
+        catch (IllegalArgumentException e){
+            throw new VecCommandException(String.format("Invalid value '%s' for VecCommand command type in file %s.'", commandArray[0], filename));
+        }
+
+        //Create VecCommand as DrawCommand if type is recognised as a draw command type.
+        if (Commands.DRAW_COMMAND_TYPES.contains(commandType)){
+            ArrayList<Double> positions = new ArrayList<>();
+            for (int i = 1; i < commandArray.length; i++){
+                String arg = commandArray[i];
+                try {
+                    positions.add(Double.valueOf(arg));
+                }
+                catch (NumberFormatException e){
+                    throw new VecCommandException(String.format("Value '%s' for DrawCommand position could not be converted to type Double.", arg));
+                }
+
+            }
+
+            command = new DrawCommand(commandType, positions);
+        }
+
+        //Create VecCommand as a ColourCommand if type is recognised as a colour command type.
+        else if (Commands.COLOUR_COMMAND_TYPES.contains(commandType)){
+            //Throw an error if the command string does not contain two discrete values.
+            if (commandArray.length != 2){
+                throw new VecCommandException(String.format("Command string '%s' contains an invalid amount of arguments for ColourCommand.", commandString));
+            }
+
+            command = new ColourCommand(commandType, commandArray[1]);
+        }
+
+        //If somehow a command type exists but does not belong to any set of types, throw an error.
+        else {
+            throw new VecCommandException(String.format("VecCommand type %s is not properly implemented.", commandType.name()));
+        }
+
+        return command;
     }
 
     /**

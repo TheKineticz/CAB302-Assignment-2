@@ -8,6 +8,7 @@ import com.thekineticz.vectool.exception.VecCommandException;
 public class ColourCommand extends VecCommand {
 
     private String colour;
+    private static final String FILL_OFF = "OFF";
 
     /**
      * Creates a new colour command.
@@ -33,7 +34,7 @@ public class ColourCommand extends VecCommand {
         }
 
         else if (commandType == Commands.Type.FILL){
-            if(!colour.equals("OFF") || !colourValidator.isValid(colour)){
+            if(!colour.equals(FILL_OFF) || !colourValidator.isValid(colour)){
                 throw new VecCommandException(colour + " is neither 'OFF' nor a valid 6-digit hexadecimal colour string.");
             }
             this.colour = colour;

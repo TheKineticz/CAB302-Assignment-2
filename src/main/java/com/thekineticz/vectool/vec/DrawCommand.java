@@ -64,8 +64,8 @@ public class DrawCommand extends VecCommand {
 
         if (!positions.isEmpty()){
             stringPositions.append(positions.get(0).toString());
-            int i = 1;
-            while (i < positions.size()){
+
+            for (int i = 1; i < positions.size(); i++){
                 stringPositions.append(" ");
                 stringPositions.append(positions.get(i).toString());
             }

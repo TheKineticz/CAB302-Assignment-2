@@ -12,7 +12,10 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
-    private static final String fileExtension = "vec";
+    private static final String FILE_EXTENSION = "vec";
+    private static final String FILL_OFF = "OFF";
+    private static final String DEFAULT_PEN_COLOUR = "#000000";
+    private static final String DEFAULT_FILL_COLOUR = FILL_OFF;
 
     private String directory;
     private String filename;
@@ -42,8 +45,8 @@ public class VecFile {
         this.directory = null;
         this.filename = filename;
         commands = new ArrayList<>();
-        latestPenColour = "#000000";
-        latestFillColour = "OFF";
+        latestPenColour = DEFAULT_PEN_COLOUR;
+        latestFillColour = DEFAULT_FILL_COLOUR;
     }
 
     /**
@@ -54,6 +57,7 @@ public class VecFile {
     public void addCommand(VecCommand command){
         commands.add(command);
 
+        //If the command is a pen or fill command, record their colour values as latest
         if (command.getCommandType() == Commands.Type.PEN){
             latestPenColour = command.getArgs();
         }
@@ -70,10 +74,12 @@ public class VecFile {
         if (!commands.isEmpty()){
             commands.remove(commands.size() - 1);
 
+            //Remove any colour commands at the end of the command list
             while (!commands.isEmpty() && commands.get(commands.size() - 1) instanceof ColourCommand){
                 commands.remove(commands.size() - 1);
             }
 
+            //Ensure the latest colour values are updated after removing colour commands
             updateLatestColours();
         }
     }
@@ -102,16 +108,21 @@ public class VecFile {
      * @param filename The name of the file, not including extension.
      */
     private void writeToFile(String directory, String filename){
-        String filePath = String.format("%s/%s.%s", directory, filename, fileExtension);
+        String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
 
         BufferedWriter bufferedWriter = null;
 
+        //Try to write all the commands in their string form to a new line in the file
         try{
             bufferedWriter = new BufferedWriter(new FileWriter(filePath));
 
-            for (VecCommand command : commands){
-                bufferedWriter.write(command.toString());
-                bufferedWriter.newLine();
+            if (!commands.isEmpty()){
+                bufferedWriter.write(commands.get(0).toString());
+
+                for (int i = 1; i < commands.size(); i++){
+                    bufferedWriter.newLine();
+                    bufferedWriter.write(commands.get(i).toString());
+                }
             }
 
             bufferedWriter.close();
@@ -121,6 +132,7 @@ public class VecFile {
             e.printStackTrace();
         }
 
+        //Ensure the file is closed properly if an error occurs
         finally{
             try{
                 bufferedWriter.close();
@@ -140,6 +152,8 @@ public class VecFile {
         boolean isPenColourFound = false;
         boolean isFillColourFound = false;
 
+        //Iterates backwards through the commands array and records the first pen and fill colours located
+        //Early exits if pen and fill colours are found before reaching the end of the array
         while (index >= 0 && !(isPenColourFound && isFillColourFound)){
             VecCommand current = commands.get(index);
 
@@ -156,12 +170,13 @@ public class VecFile {
             index--;
         }
 
+        //If no pen or fill command was located, reset the latest colours to defaults
         if (!isPenColourFound){
-            latestPenColour = "#000000";
+            latestPenColour = DEFAULT_PEN_COLOUR;
         }
 
         if (!isFillColourFound){
-            latestFillColour = "OFF";
+            latestFillColour = DEFAULT_FILL_COLOUR;
         }
     }
 

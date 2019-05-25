@@ -8,12 +8,12 @@ import java.util.HashSet;
 /**
  * Container for command-related objects.
  */
-class Commands {
+public class Commands {
 
     /**
      *  The types of commands that could be represented by a VecCommand class.
      */
-    enum Type{
+    public enum Type{
         PLOT, LINE, RECTANGLE, ELLIPSE, POLYGON, PEN, FILL
     }
 

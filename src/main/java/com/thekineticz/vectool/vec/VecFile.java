@@ -1,6 +1,7 @@
 package com.thekineticz.vectool.vec;
 
 import com.thekineticz.vectool.exception.VecCommandException;
+import com.thekineticz.vectool.exception.VecIOException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -102,8 +103,14 @@ public class VecFile {
     /**
      * Saves the current state of the VecFile to it's stored filepath.
      */
-    public void save(){
-        exportToFile(directory, filename);
+    public void save() throws VecIOException{
+        if (directory != null){
+            exportToFile(directory, filename);
+        }
+        else {
+            throw new VecIOException("New file must have a directory specified with saveAs.");
+        }
+
     }
 
     /**

@@ -25,5 +25,5 @@ hs_err_pid*
 # Others
 .idea/
 out/
-.vec
-.DS_Store
+*.vec
+*.DS_Store

@@ -1,23 +1,44 @@
 package com.thekineticz.vectool.vec.commands;
 
 /**
- * The basic interface for the internal representation of a line in a vec file.
+ * The base class for the internal representation of a line in a vec file.
  */
-public interface VecCommand{
+public abstract class VecCommand{
+
+    private String commandName;
 
     /**
-     * Takes a vec command string input and gets the internal VecCommand object representing it.
+     * Creates a new VecCommand with a commandName
      *
-     * @param command The vec command in string form.
-     * @return The internal VecCommand object representing the input command.
+     * @param commandName The string name of the command.
      */
-    VecCommand fromString(String command);
+    public VecCommand(String commandName){
+        this.commandName = commandName;
+    }
 
     /**
-     * Gets the command in its string form.
+     * Abstract function for getting the arguments of a VecCommand as a string.
      *
-     * @return The VecCommand in its string form.
+     * @return The arguments of a VecCommand as a string.
+     */
+    public abstract String getArgs();
+
+    /**
+     * Gets the command name of the VecCommand.
+     *
+     * @return The command name of the VecCommand.
+     */
+    public String getCommandName(){
+        return commandName;
+    }
+
+    /**
+     * Gets the VecCommand in it's full string form.
+     *
+     * @return The VecCommand in it's full string form.
      */
     @Override
-    String toString();
+    public String toString(){
+        return String.format("%s %s", commandName, getArgs());
+    }
 }

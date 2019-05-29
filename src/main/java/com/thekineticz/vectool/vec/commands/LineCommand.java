@@ -40,9 +40,9 @@ public class LineCommand extends VecCommand {
     }
 
     /**
-     * Get the position arguments of the line command.
+     * Get the position arguments of the line command in string form.
      *
-     * @return The position arguments of the line command.
+     * @return The position arguments of the line command in string form.
      */
     @Override
     public String getArgs(){

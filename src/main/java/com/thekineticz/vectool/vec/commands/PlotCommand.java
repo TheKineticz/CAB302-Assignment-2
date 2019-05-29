@@ -60,8 +60,7 @@ public class PlotCommand extends VecCommand {
             throw new VecCommandException("Attempted to generate PlotCommand from string with incorrect identifier.");
         }
 
-        Double x;
-        Double y;
+        Double x, y;
 
         //Try to parse the position arguments
         try {

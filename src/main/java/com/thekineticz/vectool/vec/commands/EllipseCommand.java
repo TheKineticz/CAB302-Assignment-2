@@ -40,8 +40,7 @@ public class EllipseCommand extends ShapeCommand {
         }
 
         ArrayList<Position<Double>> positions = new ArrayList<>();
-        Double x;
-        Double y;
+        Double x, y;
 
         //Get positions from string arguments
         for (int i = 0; i < REQUIRED_POSITIONS; i++){

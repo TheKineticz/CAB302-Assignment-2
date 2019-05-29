@@ -34,7 +34,7 @@ public class VecFile {
      * @param directory The directory of the VEC file that is being imported.
      * @param filename The filename of the VEC file that is being imported.
      */
-    public VecFile(String directory, String filename){
+    public VecFile(String directory, String filename) throws VecCommandException, IOException{
         this.directory = directory;
         this.filename = filename;
         commands = new ArrayList<>();
@@ -102,8 +102,11 @@ public class VecFile {
 
     /**
      * Saves the current state of the VecFile to it's stored filepath.
+     *
+     * @throws VecIOException Thrown if the function is called on a new VecFile that does not have an associated directory.
+     * @throws IOException Thrown if an error occurs while writing to file.
      */
-    public void save() throws VecIOException{
+    public void save() throws VecIOException, IOException{
         if (directory != null){
             exportToFile(directory, filename);
         }
@@ -119,7 +122,7 @@ public class VecFile {
      * @param directory The directory where the file will be saved to.
      * @param filename The name of the file, not including extension.
      */
-    public void saveAs(String directory, String filename){
+    public void saveAs(String directory, String filename) throws IOException{
         exportToFile(directory, filename);
     }
 
@@ -128,42 +131,21 @@ public class VecFile {
      *
      * @param directory The directory where the file will be saved to.
      * @param filename The name of the file, not including extension.
+     * @throws IOException Thrown if an error occurs while writing to file.
      */
-    private void exportToFile(String directory, String filename){
+    private void exportToFile(String directory, String filename) throws IOException{
         String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
 
-        BufferedWriter writer = null;
-
         //Try to write all the commands in their string form to a new line in the file
-        try {
-            writer = new BufferedWriter(new FileWriter(filePath));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
-            if (!commands.isEmpty()){
+            if (!commands.isEmpty()) {
                 writer.write(commands.get(0).toString());
 
-                for (int i = 1; i < commands.size(); i++){
+                for (int i = 1; i < commands.size(); i++) {
                     writer.newLine();
                     writer.write(commands.get(i).toString());
                 }
-            }
-
-            writer.close();
-        }
-
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
-        //Ensure the file is closed properly if an error occurs
-        finally {
-            try {
-                if (writer != null){
-                    writer.close();
-                }
-            }
-
-            catch (IOException e){
-                e.printStackTrace();
             }
         }
 
@@ -175,29 +157,17 @@ public class VecFile {
      * @param directory The directory of the vec file.
      * @param filename The filename not including extension of the vec file.
      */
-    private void importFromFile(String directory, String filename){
+    private void importFromFile(String directory, String filename) throws VecCommandException, IOException{
         String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(filePath));
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))){
             String line = reader.readLine();
-            while (line != null){
-                try {
-                    VecCommand command = generateVecCommandFromString(line);
-                    commands.add(command);
-                }
-                catch (VecCommandException e){
-                    e.printStackTrace();
-                }
 
+            while (line != null){
+                VecCommand command = generateVecCommandFromString(line);
+                commands.add(command);
                 line = reader.readLine();
             }
-        }
-
-        catch (IOException e){
-            e.printStackTrace();
         }
     }
 
@@ -223,7 +193,7 @@ public class VecFile {
             commandType = Commands.Type.valueOf(commandArray[0]);
         }
         catch (IllegalArgumentException e){
-            throw new VecCommandException(String.format("Invalid value '%s' for VecCommand command type in file %s.'", commandArray[0], filename));
+            throw new VecCommandException(String.format("Invalid value '%s' for VecCommand command type in file %s.'", commandArray[0], filename), e);
         }
 
         //Create VecCommand as DrawCommand if type is recognised as a draw command type.
@@ -235,9 +205,8 @@ public class VecFile {
                     positions.add(Double.valueOf(arg));
                 }
                 catch (NumberFormatException e){
-                    throw new VecCommandException(String.format("Value '%s' for DrawCommand position could not be converted to type Double.", arg));
+                    throw new VecCommandException(String.format("Value '%s' for DrawCommand position could not be converted to type Double.", arg), e);
                 }
-
             }
 
             command = new DrawCommand(commandType, positions);
@@ -249,7 +218,7 @@ public class VecFile {
             if (commandArray.length != 2){
                 throw new VecCommandException(String.format("Command string '%s' contains an invalid amount of arguments for ColourCommand.", commandString));
             }
-
+            
             command = new ColourCommand(commandType, commandArray[1]);
         }
 

@@ -32,14 +32,17 @@ public class PlotCommand extends VecCommand {
     public static PlotCommand fromString(String command) throws VecCommandException{
         String[] commandArray = command.split(" ");
 
+        //Check the input string for valid amount of arguments
         if (commandArray.length - 1 != REQUIRED_POSITION_VALUES){
             throw new VecCommandException(String.format("%s command string must contain %d arguments, separated by a space.", COMMAND_NAME, REQUIRED_POSITION_VALUES + 1));
         }
 
+        //Check the input string for valid identifier
         if (!commandArray[0].equals(COMMAND_NAME)){
             throw new VecCommandException("Attempted to generate PlotCommand from string with incorrect identifier.");
         }
 
+        //Try to parse the position arguments
         Double x;
         Double y;
 
@@ -50,7 +53,6 @@ public class PlotCommand extends VecCommand {
         catch (Exception e){
             throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
         }
-
 
         return new PlotCommand(new Position<>(x, y));
     }

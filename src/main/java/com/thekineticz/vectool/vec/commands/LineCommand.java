@@ -7,13 +7,11 @@ import java.util.ArrayList;
 /**
  * The internal structure of a line vec command.
  */
-public class LineCommand extends VecCommand {
+public class LineCommand extends ShapeCommand {
 
     private static final String COMMAND_NAME = "LINE";
     private static final int REQUIRED_POSITION_VALUES = 4;
     private static final int REQUIRED_POSITIONS = 2;
-
-    private ArrayList<Position<Double>> positions;
 
     /**
      * Constructs a new LineCommand.
@@ -21,38 +19,7 @@ public class LineCommand extends VecCommand {
      * @param positions The array of the line's endpoints.
      */
     public LineCommand(ArrayList<Position<Double>> positions) throws VecCommandException {
-        super(COMMAND_NAME);
-
-        if (positions.size() != REQUIRED_POSITIONS){
-            throw new VecCommandException(String.format("%s command must contain %d positions.", COMMAND_NAME, REQUIRED_POSITIONS));
-        }
-
-        this.positions = positions;
-    }
-
-    /**
-     * Get the positions of the line.
-     *
-     * @return The positions of the line.
-     */
-    public ArrayList<Position<Double>> getPositions(){
-        return positions;
-    }
-
-    /**
-     * Get the position arguments of the line command in string form.
-     *
-     * @return The position arguments of the line command in string form.
-     */
-    @Override
-    public String getArgs(){
-        StringBuilder string = new StringBuilder(positions.get(0).toString());
-        for (int i = 1; i < positions.size(); i++){
-            string.append(" ");
-            string.append(positions.get(i).toString());
-        }
-
-        return string.toString();
+        super(COMMAND_NAME, positions, REQUIRED_POSITION_VALUES);
     }
 
     /**
@@ -72,7 +39,7 @@ public class LineCommand extends VecCommand {
 
         //Check the input string for valid identifier
         if (!commandArray[0].equals(COMMAND_NAME)){
-            throw new VecCommandException("Attempted to generate LineCommand from string with incorrect identifier.");
+            throw new VecCommandException(String.format("Attempted to generate %s command from string with incorrect identifier.", COMMAND_NAME));
         }
 
         ArrayList<Position<Double>> positions = new ArrayList<>();

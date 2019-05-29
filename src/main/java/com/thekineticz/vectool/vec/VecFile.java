@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
-    private static final String FILE_EXTENSION = "vec";
+    private static final String FILE_EXTENSION = "VEC";
     private static final String FILL_OFF = "OFF";
     private static final String DEFAULT_PEN_COLOUR = "#000000";
     private static final String DEFAULT_FILL_COLOUR = FILL_OFF;

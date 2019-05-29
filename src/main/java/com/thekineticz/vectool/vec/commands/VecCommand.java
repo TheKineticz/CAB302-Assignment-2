@@ -3,7 +3,7 @@ package com.thekineticz.vectool.vec.commands;
 /**
  * The base class for the internal representation of a line in a vec file.
  */
-public abstract class VecCommand{
+public abstract class VecCommand {
 
     private String commandName;
 

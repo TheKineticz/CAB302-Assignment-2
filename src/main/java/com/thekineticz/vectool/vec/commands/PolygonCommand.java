@@ -62,6 +62,11 @@ public class PolygonCommand extends VecCommand {
             throw new VecCommandException(String.format("Attempted to create %s from empty string.", COMMAND_NAME));
         }
 
+        //Check whether the input string is empty
+        if (!commandArray[0].equals(COMMAND_NAME)){
+            throw new VecCommandException("Attempted to generate PolygonCommand from string with incorrect identifier.");
+        }
+
         //Check whether the input string has any vertex arguments
         if (commandArray.length == 1){
             throw new VecCommandException(String.format("Attempted to create %s from string with no vertex arguments.", COMMAND_NAME));

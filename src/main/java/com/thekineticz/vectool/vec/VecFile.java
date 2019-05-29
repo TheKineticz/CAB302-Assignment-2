@@ -24,6 +24,7 @@ public class VecFile {
 
     private String directory;
     private String filename;
+    private boolean isSaved;
     private ArrayList<VecCommand> commands;
     private String latestPenColour = DEFAULT_PEN_COLOUR;
     private String latestFillColour = DEFAULT_FILL_COLOUR;
@@ -37,6 +38,7 @@ public class VecFile {
     public VecFile(String directory, String filename) throws VecCommandException, IOException{
         this.directory = directory;
         this.filename = filename;
+        isSaved = true;
         commands = new ArrayList<>();
         importFromFile(directory, filename);
         updateLatestColours();
@@ -50,6 +52,7 @@ public class VecFile {
     public VecFile(String filename){
         this.directory = null;
         this.filename = filename;
+        isSaved = false;
         commands = new ArrayList<>();
     }
 
@@ -66,6 +69,7 @@ public class VecFile {
             if (!latestPenColour.equals(colour)){
                 latestPenColour = colour;
                 commands.add(command);
+                isSaved = false;
             }
         }
 
@@ -75,11 +79,13 @@ public class VecFile {
             if (!latestFillColour.equals(colour)){
                 latestFillColour = colour;
                 commands.add(command);
+                isSaved = false;
             }
         }
 
         else {
             commands.add(command);
+            isSaved = false;
         }
     }
 
@@ -97,6 +103,8 @@ public class VecFile {
 
             //Ensure the latest colour values are updated after removing colour commands
             updateLatestColours();
+
+            isSaved = false;
         }
     }
 
@@ -109,6 +117,7 @@ public class VecFile {
     public void save() throws VecIOException, IOException{
         if (directory != null){
             exportToFile(directory, filename);
+            isSaved = true;
         }
         else {
             throw new VecIOException("New file must have a directory specified with saveAs.");
@@ -124,6 +133,7 @@ public class VecFile {
      */
     public void saveAs(String directory, String filename) throws IOException{
         exportToFile(directory, filename);
+        isSaved = true;
     }
 
     /**
@@ -291,6 +301,15 @@ public class VecFile {
      */
     public String getLatestFillColour(){
         return latestFillColour;
+    }
+
+    /**
+     * Gets whether the external file is up-to-date with the internal file.
+     *
+     * @return The boolean corresponding to whether the saved file is up-to-date.
+     */
+    public boolean isSaved(){
+        return isSaved;
     }
 
 }

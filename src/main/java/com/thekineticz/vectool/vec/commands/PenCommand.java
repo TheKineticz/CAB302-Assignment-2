@@ -15,7 +15,7 @@ public class PenCommand extends VecCommand {
     /**
      * Constructs a new pen command.
      *
-     * @param colour The colour value for the pen.
+     * @param colour The 6-digit hexadecimal colour value for the pen.
      * @throws VecCommandException Thrown if an invalid value is entered for the colour.
      */
     public PenCommand(String colour) throws VecCommandException {

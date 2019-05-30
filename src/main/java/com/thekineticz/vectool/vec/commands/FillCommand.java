@@ -9,7 +9,7 @@ import com.thekineticz.vectool.vec.common.*;
 public class FillCommand extends VecCommand {
 
     public static final String COMMAND_NAME = "FILL";
-    private static final String FILL_OFF = "OFF";
+    public static final String FILL_OFF = "OFF";
     private static final int REQUIRED_ARGUMENTS = 1;
 
     private String colour;

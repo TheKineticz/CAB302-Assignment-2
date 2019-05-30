@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class LineCommand extends ShapeCommand {
 
-    private static final String COMMAND_NAME = "LINE";
+    public static final String COMMAND_NAME = "LINE";
     private static final int REQUIRED_POSITION_VALUES = 4;
     private static final int REQUIRED_POSITIONS = 2;
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class RectangleCommand extends ShapeCommand {
 
-    private static final String COMMAND_NAME = "RECTANGLE";
+    public static final String COMMAND_NAME = "RECTANGLE";
     private static final int REQUIRED_POSITION_VALUES = 4;
     private static final int REQUIRED_POSITIONS = 2;
 

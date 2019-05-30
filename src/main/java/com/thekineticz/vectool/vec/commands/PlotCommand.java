@@ -7,7 +7,7 @@ import com.thekineticz.vectool.exception.VecCommandException;
  */
 public class PlotCommand extends VecCommand {
 
-    private static final String COMMAND_NAME = "PLOT";
+    public static final String COMMAND_NAME = "PLOT";
     private static final int REQUIRED_POSITION_VALUES = 2;
 
     private Position<Double> position;

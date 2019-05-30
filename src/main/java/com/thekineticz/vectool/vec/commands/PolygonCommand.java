@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class PolygonCommand extends VecCommand {
 
-    private static final String COMMAND_NAME = "POLYGON";
+    public static final String COMMAND_NAME = "POLYGON";
 
     private ArrayList<Position<Double>> vertices;
 

@@ -7,7 +7,7 @@ import com.thekineticz.vectool.exception.VecCommandException;
  */
 public class PenCommand extends VecCommand {
 
-    private static final String COMMAND_NAME = "PEN";
+    public static final String COMMAND_NAME = "PEN";
     private static final int REQUIRED_ARGUMENTS = 1;
 
     private String colour;

@@ -7,7 +7,7 @@ import com.thekineticz.vectool.exception.VecCommandException;
  */
 public class FillCommand extends VecCommand {
 
-    private static final String COMMAND_NAME = "FILL";
+    public static final String COMMAND_NAME = "FILL";
     private static final String FILL_OFF = "OFF";
     private static final int REQUIRED_ARGUMENTS = 1;
 

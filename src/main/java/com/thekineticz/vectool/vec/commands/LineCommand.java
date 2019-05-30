@@ -20,7 +20,7 @@ public class LineCommand extends ShapeCommand {
      * @param positions The array of the line's endpoints.
      */
     public LineCommand(ArrayList<Position<Double>> positions) throws VecCommandException {
-        super(COMMAND_NAME, positions, REQUIRED_POSITION_VALUES);
+        super(COMMAND_NAME, positions, REQUIRED_POSITIONS);
     }
 
     /**

@@ -55,7 +55,7 @@ public class FillCommand extends VecCommand {
      * @return The FillCommand object representing the command string.
      * @throws VecCommandException Thrown if an error occurs while parsing the string.
      */
-    public static PenCommand fromString(String command) throws VecCommandException {
+    public static FillCommand fromString(String command) throws VecCommandException {
         String[] commandArray = command.split(" ");
 
         if (commandArray.length - 1 != REQUIRED_ARGUMENTS){
@@ -66,6 +66,6 @@ public class FillCommand extends VecCommand {
             throw new VecCommandException("Attempted to generate FillCommand from string with incorrect identifier.");
         }
 
-        return new PenCommand(commandArray[1]);
+        return new FillCommand(commandArray[1]);
     }
 }

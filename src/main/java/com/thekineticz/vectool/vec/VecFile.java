@@ -63,13 +63,26 @@ public class VecFile {
      */
     public void addCommand(VecCommand command){
 
+        //Update the latest colour values if the command is a pen or fill type command
+        if (command instanceof PenCommand){
+            latestPenColour = ((PenCommand) command).getColour();
+        }
+
+        else if (command instanceof FillCommand){
+            latestFillColour = ((FillCommand) command).getColour();
+        }
+
+        commands.add(command);
     }
 
     /**
-     * Removes the last command in the command array, including any colouring commands that prefixed it.
+     * Removes the last command in the command array.
      */
     public void undoLatestCommand(){
-
+        if (!commands.isEmpty()){
+            commands.remove(commands.size() - 1);
+            updateLatestColours();
+        }
     }
 
     /**
@@ -138,7 +151,7 @@ public class VecFile {
             String line = reader.readLine();
 
             while (line != null){
-                VecCommand command = generateVecCommandFromString(line);
+                VecCommand command = parseVecCommand(line);
                 commands.add(command);
                 line = reader.readLine();
             }
@@ -150,17 +163,66 @@ public class VecFile {
      *
      * @param commandString The full string of the command.
      * @return An initialised VecCommand.
-     * @throws VecCommandException Thrown when some issue occurs when parsing.
+     * @throws VecCommandException Thrown if an invalid vec command string is input.
      */
-    private VecCommand generateVecCommandFromString(String commandString) throws VecCommandException {
+    private VecCommand parseVecCommand(String commandString) throws VecCommandException {
+        if (commandString.startsWith(PlotCommand.COMMAND_NAME)){
+            return PlotCommand.fromString(commandString);
+        }
 
+        else if (commandString.startsWith(LineCommand.COMMAND_NAME)){
+            return LineCommand.fromString(commandString);
+        }
+
+        else if (commandString.startsWith(RectangleCommand.COMMAND_NAME)){
+            return RectangleCommand.fromString(commandString);
+        }
+
+        else if (commandString.startsWith(EllipseCommand.COMMAND_NAME)){
+            return EllipseCommand.fromString(commandString);
+        }
+
+        else if (commandString.startsWith(PolygonCommand.COMMAND_NAME)){
+            return PolygonCommand.fromString(commandString);
+        }
+
+        else if (commandString.startsWith(PenCommand.COMMAND_NAME)){
+            return PenCommand.fromString(commandString);
+        }
+
+        else if (commandString.startsWith(FillCommand.COMMAND_NAME)){
+            return FillCommand.fromString(commandString);
+        }
+
+        else {
+            throw new VecCommandException("Attempted to convert string without a valid identifier to VecCommand.");
+        }
     }
 
     /**
      * Updates the latest colour fields with the current values derived from the commands array.
      */
     private void updateLatestColours(){
+        boolean isPenColourFound = false;
+        boolean isFillColourFound = false;
 
+        for (int i = commands.size() - 1; i >= 0; i--){
+            VecCommand command = commands.get(i);
+
+            if (!isPenColourFound && command instanceof PenCommand){
+                latestPenColour = ((PenCommand) command).getColour();
+                isPenColourFound = true;
+            }
+
+            else if (!isFillColourFound && command instanceof FillCommand){
+                latestFillColour = ((FillCommand) command).getColour();
+                isFillColourFound = true;
+            }
+
+            if (isPenColourFound && isFillColourFound){
+                break;
+            }
+        }
     }
 
     /**

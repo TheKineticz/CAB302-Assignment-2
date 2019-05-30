@@ -27,7 +27,7 @@ public class EllipseCommand extends ShapeCommand {
      * @return The EllipseCommand object representing the command string.
      * @throws VecCommandException Thrown if an error occurs while parsing the string.
      */
-    public static RectangleCommand fromString(String command) throws VecCommandException {
+    public static EllipseCommand fromString(String command) throws VecCommandException {
         String[] commandArray = command.split(" ");
 
         //Check the input string for valid amount of arguments
@@ -57,6 +57,6 @@ public class EllipseCommand extends ShapeCommand {
             positions.add(new Position<>(x, y));
         }
 
-        return new RectangleCommand(positions);
+        return new EllipseCommand(positions);
     }
 }

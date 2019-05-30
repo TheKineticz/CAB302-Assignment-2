@@ -19,8 +19,11 @@ public class PolygonCommand extends VecCommand {
      *
      * @param vertices The array of the polygon's vertices.
      */
-    public PolygonCommand(ArrayList<Position<Double>> vertices){
+    public PolygonCommand(ArrayList<Position<Double>> vertices) throws VecCommandException {
         super(COMMAND_NAME);
+        if (vertices.isEmpty()){
+            throw new VecCommandException(String.format("%s command must contain at least one vertex.", COMMAND_NAME));
+        }
         this.vertices = vertices;
     }
 

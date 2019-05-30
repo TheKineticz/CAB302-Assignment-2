@@ -4,10 +4,21 @@ import com.thekineticz.vectool.exception.VecCommandException;
 
 import java.util.ArrayList;
 
+/**
+ * An extension of the VecCommand class for commands that take a fixed number of position arguments as their only arguments.
+ */
 public class ShapeCommand extends VecCommand {
 
-    protected ArrayList<Position<Double>> positions;
+    private ArrayList<Position<Double>> positions;
 
+    /**
+     * Construts a new shape command.
+     *
+     * @param commandName The name of the command being created.
+     * @param positions The positions array of the command.
+     * @param requiredPositions The amount of positions a command of the given type requires.
+     * @throws VecCommandException Thrown if the amount of positions present in positions does not match requiredPositions.
+     */
     public ShapeCommand(String commandName, ArrayList<Position<Double>> positions, int requiredPositions) throws VecCommandException {
         super(commandName);
 

@@ -28,7 +28,7 @@ public class PlotCommand extends VecCommand {
      *
      * @return The position of the plot.
      */
-    public Position getPositions(){
+    public Position getPosition(){
         return position;
     }
 

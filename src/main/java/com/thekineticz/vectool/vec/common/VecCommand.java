@@ -1,4 +1,4 @@
-package com.thekineticz.vectool.vec.commands;
+package com.thekineticz.vectool.vec.common;
 
 /**
  * The base class for the internal representation of a line in a vec file.

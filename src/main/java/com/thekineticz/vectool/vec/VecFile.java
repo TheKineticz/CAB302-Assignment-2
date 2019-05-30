@@ -1,6 +1,7 @@
 package com.thekineticz.vectool.vec;
 
 import com.thekineticz.vectool.exception.*;
+import com.thekineticz.vectool.vec.common.*;
 import com.thekineticz.vectool.vec.commands.*;
 
 import java.io.BufferedReader;

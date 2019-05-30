@@ -1,6 +1,7 @@
 package com.thekineticz.vectool.vec.commands;
 
 import com.thekineticz.vectool.exception.VecCommandException;
+import com.thekineticz.vectool.vec.common.*;
 
 /**
  * The internal structure of a pen vec command.

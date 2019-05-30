@@ -1,4 +1,4 @@
-package com.thekineticz.vectool.vec.commands;
+package com.thekineticz.vectool.vec.common;
 
 import com.thekineticz.vectool.exception.VecCommandException;
 

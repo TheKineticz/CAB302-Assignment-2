@@ -84,6 +84,7 @@ public class VecFile {
         }
 
         commands.add(command);
+        isSaved = false;
     }
 
     /**
@@ -93,6 +94,7 @@ public class VecFile {
         if (!commands.isEmpty()){
             commands.remove(commands.size() - 1);
             updateLatestColours();
+            isSaved = false;
         }
     }
 

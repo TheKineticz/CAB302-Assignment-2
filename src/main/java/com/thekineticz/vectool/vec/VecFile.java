@@ -102,7 +102,7 @@ public class VecFile {
      * @throws VecIOException Thrown if the function is called on a new VecFile that does not have an associated directory.
      * @throws IOException Thrown if an error occurs while writing to file.
      */
-    public void save() throws VecIOException, IOException{
+    public void save() throws VecIOException, IOException {
         if (directory != null){
             exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
             isSaved = true;
@@ -119,7 +119,7 @@ public class VecFile {
      * @param directory The directory where the file will be saved to.
      * @param filename The name of the file, not including extension.
      */
-    public void saveAs(String directory, String filename) throws IOException{
+    public void saveAs(String directory, String filename) throws IOException {
         exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
         isSaved = true;
     }
@@ -129,7 +129,7 @@ public class VecFile {
      *
      * @param file The file to be saved to.
      */
-    public void saveAs(File file) throws IOException{
+    public void saveAs(File file) throws IOException {
         if (file.toString().endsWith(VecFile.FILE_EXTENSION)){
             exportToFile(file);
         }
@@ -146,7 +146,7 @@ public class VecFile {
      * @param file The file to be saved to.
      * @throws IOException Thrown if an error occurs while writing to file.
      */
-    private void exportToFile(File file) throws IOException{
+    private void exportToFile(File file) throws IOException {
         //Try to write all the commands in their string form to a new line in the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 

@@ -33,11 +33,21 @@ public class VecFile {
      */
     public VecFile(File file) throws VecCommandException, IOException{
         this.directory = file.getParent();
-        this.filename = file.getName().replaceFirst("[.][^.]+$", ""); //Removes the extension from the file name
+        this.filename = removeExtension(file.getName());
         isSaved = true;
         commands = new ArrayList<>();
         open(file);
         updateLatestColours();
+    }
+
+    /**
+     * Remove the file extension from a string.
+     *
+     * @param string The input filename, including extension.
+     * @return The output filename, without extension.
+     */
+    private String removeExtension(String string){
+        return string.replaceFirst("[.][^.]+$", "");
     }
 
     /**
@@ -122,6 +132,9 @@ public class VecFile {
      */
     public void saveAs(String directory, String filename) throws IOException {
         exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
+
+        this.directory = directory;
+        this.filename = filename;
         isSaved = true;
     }
 
@@ -138,6 +151,8 @@ public class VecFile {
             exportToFile(new File(String.format("%s.%s", file.getAbsolutePath(), VecFile.FILE_EXTENSION)));
         }
 
+        directory = file.getParent();
+        filename = removeExtension(file.getName());
         isSaved = true;
     }
 

@@ -316,4 +316,13 @@ public class VecFile {
         return isSaved;
     }
 
+    /**
+     * Gets whether an external file exists for the VecFile.
+     *
+     * @return The boolean corresponding to whether an external file exists.
+     */
+    public boolean isNewFile(){
+        return directory != null;
+    }
+
 }

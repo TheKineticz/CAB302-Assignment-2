@@ -242,21 +242,21 @@ public class VecToolGUI extends JFrame {
      */
     private class VecToolGUIMenuBar extends JMenuBar implements ActionListener {
 
-        public JMenu fileMenu;
-        public JMenuItem newFileButton;
-        public JMenuItem openFileButton;
-        public JMenuItem closeFileButton;
-        public JMenuItem saveFileButton;
-        public JMenuItem saveAsFileButton;
-        public JMenuItem exitButton;
+        JMenu fileMenu;
+        JMenuItem newFileButton;
+        JMenuItem openFileButton;
+        JMenuItem closeFileButton;
+        JMenuItem saveFileButton;
+        JMenuItem saveAsFileButton;
+        JMenuItem exitButton;
 
-        public JMenu editMenu;
-        public JMenuItem undoLastButton;
+        JMenu editMenu;
+        JMenuItem undoLastButton;
 
         /**
          * Creates a new menu bar.
          */
-        public VecToolGUIMenuBar(){
+        VecToolGUIMenuBar(){
             //Setup File menu
             fileMenu = new JMenu("File");
             fileMenu.setMnemonic(KeyEvent.VK_F);

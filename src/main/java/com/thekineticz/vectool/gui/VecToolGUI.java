@@ -25,6 +25,7 @@ public class VecToolGUI {
 
         frame = new JFrame();
         frame.setTitle(TITLE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);

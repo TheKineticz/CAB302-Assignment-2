@@ -5,6 +5,9 @@ import thekineticz.vectool.vec.common.*;
 
 import java.util.ArrayList;
 
+/**
+ * The internal structure of a rectangle vec command.
+ */
 public class RectangleCommand extends ShapeCommand {
 
     public static final String COMMAND_NAME = "RECTANGLE";

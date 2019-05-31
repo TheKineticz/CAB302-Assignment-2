@@ -5,6 +5,9 @@ import thekineticz.vectool.vec.common.*;
 
 import java.util.ArrayList;
 
+/**
+ * The internal structure of an ellipse vec command.
+ */
 public class EllipseCommand extends ShapeCommand {
 
     public static final String COMMAND_NAME = "ELLIPSE";

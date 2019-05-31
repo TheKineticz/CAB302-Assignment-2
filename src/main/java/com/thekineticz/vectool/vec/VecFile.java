@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
-    private static final String FILE_EXTENSION = "VEC";
+    public static final String FILE_EXTENSION = "VEC";
     private static final String FILL_OFF = FillCommand.FILL_OFF;
     private static final String DEFAULT_PEN_COLOUR = "#000000";
     private static final String DEFAULT_FILL_COLOUR = FILL_OFF;
@@ -104,7 +104,7 @@ public class VecFile {
      */
     public void save() throws VecIOException, IOException{
         if (directory != null){
-            exportToFile(directory, filename);
+            exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
             isSaved = true;
         }
         else {
@@ -120,22 +120,35 @@ public class VecFile {
      * @param filename The name of the file, not including extension.
      */
     public void saveAs(String directory, String filename) throws IOException{
-        exportToFile(directory, filename);
+        exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
+        isSaved = true;
+    }
+
+    /**
+     * Saves the current state of the VecFile to a new filepath.
+     *
+     * @param file The file to be saved to.
+     */
+    public void saveAs(File file) throws IOException{
+        if (file.toString().endsWith(VecFile.FILE_EXTENSION)){
+            exportToFile(file);
+        }
+        else {
+            exportToFile(new File(String.format("%s.%s", file.getAbsolutePath(), VecFile.FILE_EXTENSION)));
+        }
+
         isSaved = true;
     }
 
     /**
      * Writes the current state of the VecFile to a file.
      *
-     * @param directory The directory where the file will be saved to.
-     * @param filename The name of the file, not including extension.
+     * @param file The file to be saved to.
      * @throws IOException Thrown if an error occurs while writing to file.
      */
-    private void exportToFile(String directory, String filename) throws IOException{
-        String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
-
+    private void exportToFile(File file) throws IOException{
         //Try to write all the commands in their string form to a new line in the file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
             if (!commands.isEmpty()) {
                 writer.write(commands.get(0).toString());

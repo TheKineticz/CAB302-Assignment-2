@@ -130,6 +130,8 @@ public class VecToolGUI extends JFrame {
 
             try {
                 vecFile.saveAs(file);
+                setTitle(String.format("%s - %s", vecFile.getFilename(), TITLE));
+                menuBar.saveFileButton.setEnabled(true);
                 return true;
             }
             catch (IOException e){
@@ -317,29 +319,35 @@ public class VecToolGUI extends JFrame {
             add(fileMenu); add(editMenu);
         }
 
-        public void actionPerformed(ActionEvent e){
-            if (e.getSource() == newFileButton){
+        /**
+         * Event handler for the menu bar.
+         * Executes button actions.
+         *
+         * @param event The event that occurred.
+         */
+        public void actionPerformed(ActionEvent event){
+            if (event.getSource() == newFileButton){
                 createNewVecFile();
             }
-            else if (e.getSource() == openFileButton){
+            else if (event.getSource() == openFileButton){
                 openVecFile();
             }
-            else if (e.getSource() == closeFileButton){
+            else if (event.getSource() == closeFileButton){
                 closeVecFile();
             }
-            else if (e.getSource() == saveFileButton){
+            else if (event.getSource() == saveFileButton){
                 saveVecFile();
             }
-            else if (e.getSource() == saveAsFileButton){
+            else if (event.getSource() == saveAsFileButton){
                 saveVecFileAs();
             }
-            else if (e.getSource() == undoLastButton){
+            else if (event.getSource() == undoLastButton){
                 vecFile.undoLatestCommand();
                 if (vecFile.getCommands().isEmpty()){
                     undoLastButton.setEnabled(false);
                 }
             }
-            else if (e.getSource() == exitButton){
+            else if (event.getSource() == exitButton){
                 exitGUI();
             }
         }

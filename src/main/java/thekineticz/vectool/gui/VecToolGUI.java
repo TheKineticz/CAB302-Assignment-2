@@ -17,6 +17,7 @@ public class VecToolGUI extends JFrame {
 
     private static final String TITLE = "VECtor Design Tool";
     private static final String DEFAULT_FILENAME = "untitled";
+    private static final FileNameExtensionFilter FILE_FILTER = new FileNameExtensionFilter("VEC File (*.vec)", VecFile.FILE_EXTENSION);
 
     private VecToolGUIMenuBar menuBar;
 
@@ -46,7 +47,6 @@ public class VecToolGUI extends JFrame {
             }
         });
 
-        pack();
         setVisible(true);
     }
 
@@ -123,7 +123,7 @@ public class VecToolGUI extends JFrame {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
         fileChooser.setSelectedFile(new File(String.format("%s.%s", vecFile.getFilename(), VecFile.FILE_EXTENSION)));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("VEC File", VecFile.FILE_EXTENSION));
+        fileChooser.setFileFilter(FILE_FILTER);
 
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = fileChooser.getSelectedFile();
@@ -183,7 +183,7 @@ public class VecToolGUI extends JFrame {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("VEC File", VecFile.FILE_EXTENSION));
+        fileChooser.setFileFilter(FILE_FILTER);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = fileChooser.getSelectedFile();

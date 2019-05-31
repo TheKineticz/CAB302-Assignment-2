@@ -1,7 +1,9 @@
 package com.thekineticz.vectool;
 
+import com.thekineticz.vectool.gui.VecToolGUI;
+
 /**
- * Instance manager for the VecTool application.
+ * Instance manager and entry point for the VecTool application.
  */
 public class VecTool {
 
@@ -23,7 +25,16 @@ public class VecTool {
     /**
      * Deregister the instance.
      */
-    public void close(){
+    public static void close(){
         applicationInstance = null;
+    }
+
+    /**
+     * The entry point for the Application.
+     *
+     * @param args String array arguments (Ignored)
+     */
+    public static void main(String[] args){
+        javax.swing.SwingUtilities.invokeLater(VecToolGUI::new);
     }
 }

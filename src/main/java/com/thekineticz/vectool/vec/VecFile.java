@@ -236,6 +236,15 @@ public class VecFile {
     }
 
     /**
+     * Gets the commands of the VEC file.
+     *
+     * @return The commands of the VEC file.
+     */
+    public ArrayList<VecCommand> getCommands(){
+        return commands;
+    }
+
+    /**
      * Gets the latest pen colour that was set, in 6-digit hexadecimal string form.
      *
      * @return The colour.

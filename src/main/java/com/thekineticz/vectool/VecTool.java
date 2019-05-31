@@ -20,6 +20,9 @@ public class VecTool {
         applicationInstance = this;
     }
 
+    /**
+     * Deregister the instance.
+     */
     public void close(){
         applicationInstance = null;
     }

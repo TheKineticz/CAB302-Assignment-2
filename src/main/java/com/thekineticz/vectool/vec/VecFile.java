@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class VecFile {
 
-    public static final String FILE_EXTENSION = "vec";
+    public static final String FILE_EXTENSION = "VEC";
     private static final String FILL_OFF = FillCommand.FILL_OFF;
     private static final String DEFAULT_PEN_COLOUR = "#000000";
     private static final String DEFAULT_FILL_COLOUR = FILL_OFF;
@@ -99,16 +99,16 @@ public class VecFile {
     /**
      * Saves the current state of the VecFile to it's stored filepath.
      *
-     * @throws InvalidVecFileException Thrown if the function is called on a new VecFile that does not have an associated directory.
+     * @throws VecIOException Thrown if the function is called on a new VecFile that does not have an associated directory.
      * @throws IOException Thrown if an error occurs while writing to file.
      */
-    public void save() throws InvalidVecFileException, IOException {
+    public void save() throws VecIOException, IOException {
         if (directory != null){
             exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
             isSaved = true;
         }
         else {
-            throw new InvalidVecFileException("New file must have a directory specified with saveAs.");
+            throw new VecIOException("New file must have a directory specified with saveAs.");
         }
 
     }

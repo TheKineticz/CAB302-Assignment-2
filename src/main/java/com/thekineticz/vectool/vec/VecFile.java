@@ -4,11 +4,7 @@ import com.thekineticz.vectool.exception.*;
 import com.thekineticz.vectool.vec.common.*;
 import com.thekineticz.vectool.vec.commands.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +29,20 @@ public class VecFile {
     /**
      * Creates an internal VEC class from a file.
      *
+     * @param file The file being imported.
+     */
+    public VecFile(File file) throws VecCommandException, IOException{
+        this.directory = file.getParent();
+        this.filename = file.getName().replaceFirst("[.][^.]+$", ""); //Removes the extension from the file name
+        isSaved = true;
+        commands = new ArrayList<>();
+        open(file);
+        updateLatestColours();
+    }
+
+    /**
+     * Creates an internal VEC class from a file.
+     *
      * @param directory The directory of the VEC file that is being imported.
      * @param filename The filename of the VEC file that is being imported.
      */
@@ -41,7 +51,7 @@ public class VecFile {
         this.filename = filename;
         isSaved = true;
         commands = new ArrayList<>();
-        importFromFile(directory, filename);
+        open(directory, filename);
         updateLatestColours();
     }
 
@@ -140,15 +150,37 @@ public class VecFile {
     }
 
     /**
+     * Imports a vec file.
+     *
+     * @param file The file being imported.
+     * @throws VecCommandException Thrown if an issue occurs while parsing a command.
+     * @throws IOException Thrown if an issue occurs during file IO.
+     */
+    private void open(File file) throws VecCommandException, IOException {
+        importFromFile(file);
+    }
+
+    /**
+     * Imports a vec file.
+     *
+     * @param directory The directory file being imported.
+     * @param filename The name without extension of the file being imported.
+     * @throws VecCommandException Thrown if an issue occurs while parsing a command.
+     * @throws IOException Thrown if an issue occurs during file IO.
+     */
+    private void open(String directory, String filename) throws VecCommandException, IOException {
+        importFromFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
+    }
+
+    /**
      * Generates a complete VecFile from an external file.
      *
-     * @param directory The directory of the vec file.
-     * @param filename The filename not including extension of the vec file.
+     * @param file The vec file.
+     * @throws VecCommandException Thrown if an issue occurs while parsing a command.
+     * @throws IOException Thrown if an issue occurs during file IO.
      */
-    private void importFromFile(String directory, String filename) throws VecCommandException, IOException{
-        String filePath = String.format("%s/%s.%s", directory, filename, FILE_EXTENSION);
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))){
+    private void importFromFile(File file) throws VecCommandException, IOException{
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
             String line = reader.readLine();
 
             while (line != null){

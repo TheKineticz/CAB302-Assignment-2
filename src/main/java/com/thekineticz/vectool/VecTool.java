@@ -2,6 +2,8 @@ package com.thekineticz.vectool;
 
 import com.thekineticz.vectool.gui.VecToolGUI;
 
+import javax.swing.*;
+
 /**
  * Instance manager and entry point for the VecTool application.
  */
@@ -35,6 +37,13 @@ public class VecTool {
      * @param args String array arguments (Ignored)
      */
     public static void main(String[] args){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         javax.swing.SwingUtilities.invokeLater(VecToolGUI::new);
     }
 }

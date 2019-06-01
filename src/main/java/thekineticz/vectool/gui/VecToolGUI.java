@@ -4,6 +4,7 @@ import thekineticz.vectool.VecTool;
 import thekineticz.vectool.exception.*;
 import thekineticz.vectool.vec.VecFile;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +19,11 @@ public class VecToolGUI extends JFrame {
     private static final String TITLE = "VECtor Design Tool";
     private static final String DEFAULT_FILENAME = "untitled";
     private static final FileNameExtensionFilter FILE_FILTER = new FileNameExtensionFilter("VEC File (*.vec)", VecFile.FILE_EXTENSION);
+    private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 800);
 
     private VecToolGUIMenuBar menuBar;
+    private VecToolbar toolbar;
+    private VecCanvas vecCanvas;
 
     private VecFile vecFile = null;
 
@@ -30,13 +34,22 @@ public class VecToolGUI extends JFrame {
     public VecToolGUI() {
         new VecTool();
 
-        //Setup frame
+        //Set up frame
+        setPreferredSize(DEFAULT_WINDOW_SIZE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle(TITLE);
 
-        //Setup menu bar
+        //Set up menu bar
         menuBar = new VecToolGUIMenuBar();
         setJMenuBar(menuBar);
+
+        //Set up tool bar
+        toolbar = new VecToolbar();
+        add(toolbar, BorderLayout.NORTH);
+
+        //Set up canvas
+        vecCanvas = new VecCanvas();
+        add(vecCanvas, BorderLayout.CENTER);
 
         //Override window close operation to custom function.
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -47,7 +60,7 @@ public class VecToolGUI extends JFrame {
             }
         });
 
-        //Show frame
+        pack();
         setVisible(true);
     }
 
@@ -249,8 +262,6 @@ public class VecToolGUI extends JFrame {
         JMenu windowMenu;
         JCheckBoxMenuItem toolbarWindowButton;
         JCheckBoxMenuItem colourPickerWindowButton;
-        private static final boolean TOOL_WINDOW_STARTS_ENABLED = true;
-        private static final boolean COLOUR_WINDOW_STARTS_ENABLED = true;
 
         /**
          * Creates a new menu bar.
@@ -312,23 +323,8 @@ public class VecToolGUI extends JFrame {
 
             editMenu.add(undoLastButton);
 
-            //Setup Window menu
-            windowMenu = new JMenu("Window");
-            windowMenu.setMnemonic(KeyEvent.VK_W);
-
-            toolbarWindowButton = new JCheckBoxMenuItem("Tools", TOOL_WINDOW_STARTS_ENABLED);
-            toolbarWindowButton.setMnemonic(KeyEvent.VK_T);
-            toolbarWindowButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
-            colourPickerWindowButton = new JCheckBoxMenuItem("Colours", COLOUR_WINDOW_STARTS_ENABLED);
-            colourPickerWindowButton.setMnemonic(KeyEvent.VK_C);
-            colourPickerWindowButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
-            windowMenu.add(toolbarWindowButton);
-            windowMenu.add(colourPickerWindowButton);
-
             //Setup menu bar
-            add(fileMenu); add(editMenu); add(windowMenu);
+            add(fileMenu); add(editMenu);
         }
 
         /**

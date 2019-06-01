@@ -47,6 +47,7 @@ public class VecToolGUI extends JFrame {
             }
         });
 
+        //Show frame
         setVisible(true);
     }
 
@@ -163,12 +164,7 @@ public class VecToolGUI extends JFrame {
         menuBar.closeFileButton.setEnabled(true);
         menuBar.saveFileButton.setEnabled(false);
         menuBar.saveAsFileButton.setEnabled(true);
-        if (vecFile.getCommands().isEmpty()){
-            menuBar.undoLastButton.setEnabled(false);
-        }
-        else {
-            menuBar.undoLastButton.setEnabled(true);
-        }
+        menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
     }
 
     /**
@@ -195,12 +191,7 @@ public class VecToolGUI extends JFrame {
                 menuBar.closeFileButton.setEnabled(true);
                 menuBar.saveFileButton.setEnabled(true);
                 menuBar.saveAsFileButton.setEnabled(true);
-                if (vecFile.getCommands().isEmpty()){
-                    menuBar.undoLastButton.setEnabled(false);
-                }
-                else {
-                    menuBar.undoLastButton.setEnabled(true);
-                }
+                menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
             }
             catch (VecCommandException e){
                 JOptionPane.showMessageDialog(
@@ -254,6 +245,12 @@ public class VecToolGUI extends JFrame {
 
         JMenu editMenu;
         JMenuItem undoLastButton;
+
+        JMenu windowMenu;
+        JCheckBoxMenuItem toolbarWindowButton;
+        JCheckBoxMenuItem colourPickerWindowButton;
+        private static final boolean TOOL_WINDOW_STARTS_ENABLED = true;
+        private static final boolean COLOUR_WINDOW_STARTS_ENABLED = true;
 
         /**
          * Creates a new menu bar.
@@ -315,8 +312,23 @@ public class VecToolGUI extends JFrame {
 
             editMenu.add(undoLastButton);
 
+            //Setup Window menu
+            windowMenu = new JMenu("Window");
+            windowMenu.setMnemonic(KeyEvent.VK_W);
+
+            toolbarWindowButton = new JCheckBoxMenuItem("Tools", TOOL_WINDOW_STARTS_ENABLED);
+            toolbarWindowButton.setMnemonic(KeyEvent.VK_T);
+            toolbarWindowButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+
+            colourPickerWindowButton = new JCheckBoxMenuItem("Colours", COLOUR_WINDOW_STARTS_ENABLED);
+            colourPickerWindowButton.setMnemonic(KeyEvent.VK_C);
+            colourPickerWindowButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+
+            windowMenu.add(toolbarWindowButton);
+            windowMenu.add(colourPickerWindowButton);
+
             //Setup menu bar
-            add(fileMenu); add(editMenu);
+            add(fileMenu); add(editMenu); add(windowMenu);
         }
 
         /**
@@ -343,9 +355,7 @@ public class VecToolGUI extends JFrame {
             }
             else if (event.getSource() == undoLastButton){
                 vecFile.undoLatestCommand();
-                if (vecFile.getCommands().isEmpty()){
-                    undoLastButton.setEnabled(false);
-                }
+                undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
             }
             else if (event.getSource() == exitButton){
                 exitGUI();

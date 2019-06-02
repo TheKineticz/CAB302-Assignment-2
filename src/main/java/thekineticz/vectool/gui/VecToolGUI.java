@@ -23,6 +23,7 @@ public class VecToolGUI extends JFrame {
 
     private VecToolGUIMenuBar menuBar;
     private VecToolbar toolbar;
+    private JPanel canvasPanel;
     private VecCanvas vecCanvas;
 
     private VecFile vecFile = null;
@@ -48,8 +49,9 @@ public class VecToolGUI extends JFrame {
         add(toolbar, BorderLayout.NORTH);
 
         //Set up canvas
-        vecCanvas = new VecCanvas();
-        add(vecCanvas, BorderLayout.CENTER);
+        canvasPanel = new JPanel(new GridBagLayout());
+        canvasPanel.setBackground(Color.LIGHT_GRAY);
+        add(canvasPanel, BorderLayout.CENTER);
 
         //Override window close operation to custom function.
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -62,6 +64,12 @@ public class VecToolGUI extends JFrame {
 
         pack();
         setVisible(true);
+    }
+
+    private void createCanvas(VecFile vecFile){
+        vecCanvas = new VecCanvas(vecFile);
+        canvasPanel.add(vecCanvas);
+        canvasPanel.revalidate();
     }
 
     /**
@@ -166,11 +174,7 @@ public class VecToolGUI extends JFrame {
      * Prompt to save existing file and create a new VecFile.
      */
     private void createNewVecFile(){
-        if (vecFile != null && !vecFile.isSaved()){
-            if (!promptToSave()){
-                return;
-            }
-        }
+        closeVecFile();
 
         vecFile = new VecFile(DEFAULT_FILENAME);
         setTitle(String.format("%s - %s", vecFile.getFilename(), TITLE));
@@ -179,17 +183,15 @@ public class VecToolGUI extends JFrame {
         menuBar.saveAsFileButton.setEnabled(true);
         menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
         toolbar.colourSelector.reset();
+
+        createCanvas(vecFile);
     }
 
     /**
      * Prompt to save existing file and start prompt to open an existing vec file.
      */
     private void openVecFile(){
-        if (vecFile != null && !vecFile.isSaved()){
-            if (!promptToSave()){
-                return;
-            }
-        }
+        closeVecFile();
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -208,6 +210,8 @@ public class VecToolGUI extends JFrame {
                 menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
                 toolbar.colourSelector.setPenColour(ColourHexConverter.hex2rgb(vecFile.getLatestPenColour()));
                 toolbar.colourSelector.setFillColour(ColourHexConverter.hex2rgb(vecFile.getLatestFillColour()));
+
+                createCanvas(vecFile);
             }
             catch (VecCommandException e){
                 JOptionPane.showMessageDialog(
@@ -236,6 +240,12 @@ public class VecToolGUI extends JFrame {
             if (!promptToSave()){
                 return;
             }
+        }
+
+        if (vecCanvas != null){
+            canvasPanel.remove(vecCanvas);
+            canvasPanel.revalidate();
+            canvasPanel.repaint();
         }
 
         vecFile = null;

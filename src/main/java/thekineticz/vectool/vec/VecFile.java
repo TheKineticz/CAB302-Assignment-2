@@ -285,6 +285,14 @@ public class VecFile {
                 break;
             }
         }
+
+        if (!isPenColourFound){
+            latestPenColour = DEFAULT_PEN_COLOUR;
+        }
+
+        if (!isFillColourFound){
+            latestFillColour = DEFAULT_FILL_COLOUR;
+        }
     }
 
     /**

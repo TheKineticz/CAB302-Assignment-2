@@ -483,7 +483,7 @@ public class VecToolGUI extends JFrame {
         private void addLine(){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
-                vecFile.addCommand(new LineCommand((ArrayList)positionBuffer.clone()));
+                vecFile.addCommand(new LineCommand(new ArrayList<>(positionBuffer)));
             }
             catch (VecCommandException e){
                 e.printStackTrace();
@@ -499,7 +499,7 @@ public class VecToolGUI extends JFrame {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
-                vecFile.addCommand(new RectangleCommand((ArrayList)positionBuffer.clone()));
+                vecFile.addCommand(new RectangleCommand(new ArrayList<>(positionBuffer)));
             }
             catch (VecCommandException e){
                 e.printStackTrace();
@@ -515,7 +515,7 @@ public class VecToolGUI extends JFrame {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
-                vecFile.addCommand(new EllipseCommand((ArrayList)positionBuffer.clone()));
+                vecFile.addCommand(new EllipseCommand(new ArrayList<>(positionBuffer)));
             }
             catch (VecCommandException e){
                 e.printStackTrace();
@@ -531,7 +531,7 @@ public class VecToolGUI extends JFrame {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
-                vecFile.addCommand(new PolygonCommand((ArrayList)positionBuffer.clone()));
+                vecFile.addCommand(new PolygonCommand(new ArrayList<>(positionBuffer)));
             }
             catch (VecCommandException e){
                 e.printStackTrace();

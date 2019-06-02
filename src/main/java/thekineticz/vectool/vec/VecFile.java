@@ -84,13 +84,23 @@ public class VecFile {
      */
     public void addCommand(VecCommand command){
 
-        //Update the latest colour values if the command is a pen or fill type command
+        //Optimises colour command creation and updates latest colours.
         if (command instanceof PenCommand){
-            latestPenColour = ((PenCommand) command).getColour();
+            if (((PenCommand) command).getColour().equals(latestPenColour)){
+                return;
+            }
+            else {
+                latestPenColour = ((PenCommand) command).getColour();
+            }
         }
 
         else if (command instanceof FillCommand){
-            latestFillColour = ((FillCommand) command).getColour();
+            if (((FillCommand) command).getColour().equals(latestFillColour)){
+                return;
+            }
+            else {
+                latestFillColour = ((FillCommand) command).getColour();
+            }
         }
 
         commands.add(command);

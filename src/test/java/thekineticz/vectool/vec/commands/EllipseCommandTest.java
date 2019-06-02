@@ -15,14 +15,14 @@ public class EllipseCommandTest {
     @Test
     public void testConstruction(){
         assertDoesNotThrow(() -> {
-            ArrayList<Position<Double>> pc1Pos = new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
+            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
             }};
 
-            ArrayList<Position<Double>> pc2Pos = new ArrayList<>(){{
-                add(new Position<>(0.5, 0.5));
-                add(new Position<>(0.5, 0.3));
+            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+                add(new Position(0.5, 0.5));
+                add(new Position(0.5, 0.3));
             }};
 
             EllipseCommand pc1 = new EllipseCommand(pc1Pos);
@@ -36,15 +36,15 @@ public class EllipseCommandTest {
     public void testValidPositions(){
         assertDoesNotThrow(() ->
                 new EllipseCommand(new ArrayList<>(){{
-                    add(new Position<>(0.2, 0.2));
-                    add(new Position<>(0.8, 0.8));
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.8, 0.8));
                 }})
         );
 
         assertDoesNotThrow(() ->
                 new EllipseCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
-                    add(new Position<>(1.0, 1.0));
+                    add(new Position(0.0, 0.0));
+                    add(new Position(1.0, 1.0));
                 }})
         );
     }
@@ -55,15 +55,15 @@ public class EllipseCommandTest {
 
         assertThrows(VecCommandException.class, () ->
                 new EllipseCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
+                    add(new Position(0.0, 0.0));
                 }})
         );
 
         assertThrows(VecCommandException.class, () ->
                 new EllipseCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
-                    add(new Position<>(0.2, 0.2));
-                    add(new Position<>(0.5, 0.5));
+                    add(new Position(0.0, 0.0));
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.5, 0.5));
                 }})
         );
     }
@@ -154,8 +154,8 @@ public class EllipseCommandTest {
     public void testToStringConversion(){
         try {
             EllipseCommand ec = new EllipseCommand(new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
             }});
             assertEquals("ELLIPSE 0.2 0.2 0.8 0.8", ec.toString());
         }

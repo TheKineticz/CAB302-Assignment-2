@@ -14,8 +14,8 @@ public class PlotCommandTest {
     @Test
     public void testConstruction(){
         assertDoesNotThrow(() -> {
-            PlotCommand pc1 = new PlotCommand(new Position<>(0.5, 0.5));
-            PlotCommand pc2 = new PlotCommand(new Position<>(0.7, 0.3));
+            PlotCommand pc1 = new PlotCommand(new Position(0.5, 0.5));
+            PlotCommand pc2 = new PlotCommand(new Position(0.7, 0.3));
 
             assertNotEquals(pc1.getPosition(), pc2.getPosition());
         });
@@ -23,8 +23,8 @@ public class PlotCommandTest {
 
     @Test
     public void testGetArgs(){
-        PlotCommand pc1 = new PlotCommand(new Position<>(0.5, 0.5));
-        PlotCommand pc2 = new PlotCommand(new Position<>(0.7, 0.3));
+        PlotCommand pc1 = new PlotCommand(new Position(0.5, 0.5));
+        PlotCommand pc2 = new PlotCommand(new Position(0.7, 0.3));
 
         assertEquals(pc1.getArgs(), "0.5 0.5");
         assertEquals(pc2.getArgs(), "0.7 0.3");
@@ -111,7 +111,7 @@ public class PlotCommandTest {
     @Test
     public void testToStringConversion(){
         try {
-            PlotCommand pc = new PlotCommand(new Position<>(0.5, 0.5));
+            PlotCommand pc = new PlotCommand(new Position(0.5, 0.5));
             assertEquals("PLOT 0.5 0.5", pc.toString());
         }
         catch (Exception e){

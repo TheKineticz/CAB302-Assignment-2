@@ -10,16 +10,16 @@ public class PositionTest {
 
     @Test
     public void returnsCorrectValues(){
-        Position<Integer> pos = new Position<>(2, 8);
-        assertEquals(2, (int) pos.getX());
-        assertEquals(8, (int) pos.getY());
+        Position pos = new Position(2.0, 8.0);
+        assertEquals(2, pos.getX());
+        assertEquals(8, pos.getY());
     }
 
     @Test
     public void testEquality(){
-        Position<Integer> pos1 = new Position<>(2, 8);
-        Position<Integer> pos2 = new Position<>(-2, -8);
-        Position<Integer> pos3 = new Position<>(2, 8);
+        Position pos1 = new Position(2.0, 8.0);
+        Position pos2 = new Position(-2.0, -8.0);
+        Position pos3 = new Position(2.0, 8.0);
 
         assertEquals(pos1, pos3);
         assertEquals(pos3, pos1);
@@ -30,9 +30,9 @@ public class PositionTest {
 
     @Test
     public void testHashEquality(){
-        Position<Integer> pos1 = new Position<>(2, 8);
-        Position<Integer> pos2 = new Position<>(-2, -8);
-        Position<Integer> pos3 = new Position<>(2, 8);
+        Position pos1 = new Position(2.0, 8.0);
+        Position pos2 = new Position(-2.0, -8.0);
+        Position pos3 = new Position(2.0, 8.0);
 
         assertEquals(pos1.hashCode(), pos3.hashCode());
         assertEquals(pos3.hashCode(), pos1.hashCode());

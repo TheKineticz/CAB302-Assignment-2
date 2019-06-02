@@ -19,7 +19,7 @@ public class RectangleCommand extends ShapeCommand {
      *
      * @param positions The array of the rectangle's top-left and bottom-right points.
      */
-    public RectangleCommand(ArrayList<Position<Double>> positions) throws VecCommandException {
+    public RectangleCommand(ArrayList<Position> positions) throws VecCommandException {
         super(COMMAND_NAME, positions, REQUIRED_POSITIONS);
     }
 
@@ -43,7 +43,7 @@ public class RectangleCommand extends ShapeCommand {
             throw new VecCommandException("Attempted to generate RectangleCommand from string with incorrect identifier.");
         }
 
-        ArrayList<Position<Double>> positions = new ArrayList<>();
+        ArrayList<Position> positions = new ArrayList<>();
         Double x;
         Double y;
 
@@ -58,7 +58,7 @@ public class RectangleCommand extends ShapeCommand {
             catch (Exception e){
                 throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
             }
-            positions.add(new Position<>(x, y));
+            positions.add(new Position(x, y));
         }
 
         return new RectangleCommand(positions);

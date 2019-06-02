@@ -19,7 +19,7 @@ public class LineCommand extends ShapeCommand {
      *
      * @param positions The array of the line's endpoints.
      */
-    public LineCommand(ArrayList<Position<Double>> positions) throws VecCommandException {
+    public LineCommand(ArrayList<Position> positions) throws VecCommandException {
         super(COMMAND_NAME, positions, REQUIRED_POSITIONS);
     }
 
@@ -43,7 +43,7 @@ public class LineCommand extends ShapeCommand {
             throw new VecCommandException(String.format("Attempted to generate %s command from string with incorrect identifier.", COMMAND_NAME));
         }
 
-        ArrayList<Position<Double>> positions = new ArrayList<>();
+        ArrayList<Position> positions = new ArrayList<>();
         Double x, y;
 
         //Get positions from string arguments
@@ -57,7 +57,7 @@ public class LineCommand extends ShapeCommand {
             catch (Exception e){
                 throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
             }
-            positions.add(new Position<>(x, y));
+            positions.add(new Position(x, y));
         }
 
         return new LineCommand(positions);

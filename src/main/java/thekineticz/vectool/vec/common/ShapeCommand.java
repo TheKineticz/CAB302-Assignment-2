@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class ShapeCommand extends VecCommand {
 
-    private ArrayList<Position<Double>> positions;
+    private ArrayList<Position> positions;
 
     /**
      * Construts a new shape command.
@@ -19,7 +19,7 @@ public class ShapeCommand extends VecCommand {
      * @param requiredPositions The amount of positions a command of the given type requires.
      * @throws VecCommandException Thrown if the amount of positions present in positions does not match requiredPositions.
      */
-    public ShapeCommand(String commandName, ArrayList<Position<Double>> positions, int requiredPositions) throws VecCommandException {
+    public ShapeCommand(String commandName, ArrayList<Position> positions, int requiredPositions) throws VecCommandException {
         super(commandName);
 
         if (positions.size() != requiredPositions){
@@ -34,7 +34,7 @@ public class ShapeCommand extends VecCommand {
      *
      * @return The positions of the shape.
      */
-    public ArrayList<Position<Double>> getPositions(){
+    public ArrayList<Position> getPositions(){
         return positions;
     }
 

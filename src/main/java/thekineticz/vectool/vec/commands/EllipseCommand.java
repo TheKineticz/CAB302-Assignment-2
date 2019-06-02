@@ -19,7 +19,7 @@ public class EllipseCommand extends ShapeCommand {
      *
      * @param positions The array of the ellipse's top-left and bottom-right boundaries.
      */
-    public EllipseCommand(ArrayList<Position<Double>> positions) throws VecCommandException {
+    public EllipseCommand(ArrayList<Position> positions) throws VecCommandException {
         super(COMMAND_NAME, positions, REQUIRED_POSITIONS);
     }
 
@@ -43,7 +43,7 @@ public class EllipseCommand extends ShapeCommand {
             throw new VecCommandException("Attempted to generate EllipseCommand from string with incorrect identifier.");
         }
 
-        ArrayList<Position<Double>> positions = new ArrayList<>();
+        ArrayList<Position> positions = new ArrayList<>();
         Double x, y;
 
         //Get positions from string arguments
@@ -57,7 +57,7 @@ public class EllipseCommand extends ShapeCommand {
             catch (Exception e){
                 throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
             }
-            positions.add(new Position<>(x, y));
+            positions.add(new Position(x, y));
         }
 
         return new EllipseCommand(positions);

@@ -12,14 +12,14 @@ public class PolygonCommand extends VecCommand {
 
     public static final String COMMAND_NAME = "POLYGON";
 
-    private ArrayList<Position<Double>> vertices;
+    private ArrayList<Position> vertices;
 
     /**
      * Constructs a new PolygonCommand.
      *
      * @param vertices The array of the polygon's vertices.
      */
-    public PolygonCommand(ArrayList<Position<Double>> vertices) throws VecCommandException {
+    public PolygonCommand(ArrayList<Position> vertices) throws VecCommandException {
         super(COMMAND_NAME);
         if (vertices.isEmpty()){
             throw new VecCommandException(String.format("%s command must contain at least one vertex.", COMMAND_NAME));
@@ -32,7 +32,7 @@ public class PolygonCommand extends VecCommand {
      *
      * @return The vertices array of the polygon.
      */
-    public ArrayList<Position<Double>> getVertices(){
+    public ArrayList<Position> getVertices(){
         return vertices;
     }
 
@@ -81,7 +81,7 @@ public class PolygonCommand extends VecCommand {
             throw new VecCommandException(String.format("Attempted to create %s from command string an invalid amount of position arguments.", COMMAND_NAME));
         }
 
-        ArrayList<Position<Double>> positions = new ArrayList<>();
+        ArrayList<Position> positions = new ArrayList<>();
         Double x, y;
 
         //Try to parse the position arguments
@@ -93,7 +93,7 @@ public class PolygonCommand extends VecCommand {
             catch (Exception e){
                 throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
             }
-            positions.add(new Position<>(x, y));
+            positions.add(new Position(x, y));
         }
 
         return new PolygonCommand(positions);

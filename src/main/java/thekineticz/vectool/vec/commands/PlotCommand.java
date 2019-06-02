@@ -11,14 +11,14 @@ public class PlotCommand extends VecCommand {
     public static final String COMMAND_NAME = "PLOT";
     private static final int REQUIRED_POSITION_VALUES = 2;
 
-    private Position<Double> position;
+    private Position position;
 
     /**
      * Constructs a new PlotCommand.
      *
      * @param position The position of the plot.
      */
-    public PlotCommand(Position<Double> position){
+    public PlotCommand(Position position){
         super(COMMAND_NAME);
         this.position = position;
     }
@@ -72,6 +72,6 @@ public class PlotCommand extends VecCommand {
             throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
         }
 
-        return new PlotCommand(new Position<>(x, y));
+        return new PlotCommand(new Position(x, y));
     }
 }

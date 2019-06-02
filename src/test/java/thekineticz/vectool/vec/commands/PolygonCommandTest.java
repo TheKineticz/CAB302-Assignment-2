@@ -16,16 +16,16 @@ public class PolygonCommandTest {
     @Test
     public void testConstruction(){
         assertDoesNotThrow(() -> {
-            ArrayList<Position<Double>> pc1Pos = new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
-                add(new Position<>(0.1, 0.1));
-                add(new Position<>(0.2, 0.3));
+            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
+                add(new Position(0.1, 0.1));
+                add(new Position(0.2, 0.3));
             }};
 
-            ArrayList<Position<Double>> pc2Pos = new ArrayList<>(){{
-                add(new Position<>(0.5, 0.5));
-                add(new Position<>(0.5, 0.3));
+            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+                add(new Position(0.5, 0.5));
+                add(new Position(0.5, 0.3));
             }};
 
             PolygonCommand pc1 = new PolygonCommand(pc1Pos);
@@ -39,18 +39,18 @@ public class PolygonCommandTest {
     public void testValidPositions(){
         assertDoesNotThrow(() ->
                 new PolygonCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
-                    add(new Position<>(0.0, 1.0));
-                    add(new Position<>(1.0, 1.0));
-                    add(new Position<>(1.0, 0.0));
+                    add(new Position(0.0, 0.0));
+                    add(new Position(0.0, 1.0));
+                    add(new Position(1.0, 1.0));
+                    add(new Position(1.0, 0.0));
                 }})
         );
 
         assertDoesNotThrow(() ->
                 new PolygonCommand(new ArrayList<>(){{
-                    add(new Position<>(0.2, 0.2));
-                    add(new Position<>(0.5, 0.8));
-                    add(new Position<>(0.8, 0.2));
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.5, 0.8));
+                    add(new Position(0.8, 0.2));
                 }})
         );
     }
@@ -161,9 +161,9 @@ public class PolygonCommandTest {
     public void testToStringConversion(){
         try {
             PolygonCommand pc = new PolygonCommand(new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
-                add(new Position<>(0.334, 0.32));
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
+                add(new Position(0.334, 0.32));
             }});
             assertEquals("POLYGON 0.2 0.2 0.8 0.8 0.334 0.32", pc.toString());
         }

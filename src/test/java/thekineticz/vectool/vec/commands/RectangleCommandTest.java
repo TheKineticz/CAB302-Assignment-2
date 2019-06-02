@@ -15,14 +15,14 @@ public class RectangleCommandTest {
     @Test
     public void testConstruction(){
         assertDoesNotThrow(() -> {
-            ArrayList<Position<Double>> pc1Pos = new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
+            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
             }};
 
-            ArrayList<Position<Double>> pc2Pos = new ArrayList<>(){{
-                add(new Position<>(0.5, 0.5));
-                add(new Position<>(0.5, 0.3));
+            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+                add(new Position(0.5, 0.5));
+                add(new Position(0.5, 0.3));
             }};
 
             RectangleCommand pc1 = new RectangleCommand(pc1Pos);
@@ -36,15 +36,15 @@ public class RectangleCommandTest {
     public void testValidPositions(){
         assertDoesNotThrow(() ->
                 new RectangleCommand(new ArrayList<>(){{
-                    add(new Position<>(0.2, 0.2));
-                    add(new Position<>(0.8, 0.8));
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.8, 0.8));
                 }})
         );
 
         assertDoesNotThrow(() ->
                 new RectangleCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
-                    add(new Position<>(1.0, 1.0));
+                    add(new Position(0.0, 0.0));
+                    add(new Position(1.0, 1.0));
                 }})
         );
     }
@@ -55,15 +55,15 @@ public class RectangleCommandTest {
 
         assertThrows(VecCommandException.class, () ->
                 new RectangleCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
+                    add(new Position(0.0, 0.0));
                 }})
         );
 
         assertThrows(VecCommandException.class, () ->
                 new RectangleCommand(new ArrayList<>(){{
-                    add(new Position<>(0.0, 0.0));
-                    add(new Position<>(0.2, 0.2));
-                    add(new Position<>(0.5, 0.5));
+                    add(new Position(0.0, 0.0));
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.5, 0.5));
                 }})
         );
     }
@@ -154,8 +154,8 @@ public class RectangleCommandTest {
     public void testToStringConversion(){
         try {
             RectangleCommand rc = new RectangleCommand(new ArrayList<>(){{
-                add(new Position<>(0.2, 0.2));
-                add(new Position<>(0.8, 0.8));
+                add(new Position(0.2, 0.2));
+                add(new Position(0.8, 0.8));
             }});
             assertEquals("RECTANGLE 0.2 0.2 0.8 0.8", rc.toString());
         }

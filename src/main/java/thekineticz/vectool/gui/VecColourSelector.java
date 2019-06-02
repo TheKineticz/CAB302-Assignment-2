@@ -61,6 +61,20 @@ class VecColourSelector extends JToolBar {
     }
 
     /**
+     * Gets the pen colour.
+     */
+    Color getPenColour(){
+        return penColourButton.getColour();
+    }
+
+    /**
+     * Gets the fill colour.
+     */
+    Color getFillColour(){
+        return fillColourButton.getColour();
+    }
+
+    /**
      * Inner class for the custom colour preview/selector buttons.
      */
     private class ColourSelectorButton extends JPanel implements ActionListener {

@@ -466,7 +466,7 @@ public class VecToolGUI extends JFrame {
          */
         private void addPlot(Position position) {
             try {
-                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(getNextPenColour())));
                 vecFile.addCommand(new PlotCommand(position));
             } catch (VecCommandException e) {
                 e.printStackTrace();
@@ -480,7 +480,7 @@ public class VecToolGUI extends JFrame {
          */
         private void addLine() {
             try {
-                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(getNextPenColour())));
                 vecFile.addCommand(new LineCommand(new ArrayList<>(positionBuffer)));
             } catch (VecCommandException e) {
                 e.printStackTrace();
@@ -494,8 +494,8 @@ public class VecToolGUI extends JFrame {
          */
         private void addRectangle() {
             try {
-                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
-                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(getNextPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(getNextFillColour())));
                 vecFile.addCommand(new RectangleCommand(new ArrayList<>(positionBuffer)));
             } catch (VecCommandException e) {
                 e.printStackTrace();
@@ -509,8 +509,8 @@ public class VecToolGUI extends JFrame {
          */
         private void addEllipse() {
             try {
-                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
-                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(getNextPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(getNextFillColour())));
                 vecFile.addCommand(new EllipseCommand(new ArrayList<>(positionBuffer)));
             } catch (VecCommandException e) {
                 e.printStackTrace();
@@ -524,8 +524,8 @@ public class VecToolGUI extends JFrame {
          */
         private void addPolygon() {
             try {
-                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
-                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(getNextPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(getNextFillColour())));
                 vecFile.addCommand(new PolygonCommand(new ArrayList<>(positionBuffer)));
             } catch (VecCommandException e) {
                 e.printStackTrace();
@@ -553,6 +553,7 @@ public class VecToolGUI extends JFrame {
                 previousTool = PlotCommand.class;
                 activeTool = PlotCommand.class;
                 addPlot(eventPosition);
+                menuBar.undoLastButton.setEnabled(true);
             } else if (toolbar.toolSelector.lineToolButton.isSelected()) {
                 activeTool = LineCommand.class;
                 positionBuffer.add(eventPosition);
@@ -567,6 +568,7 @@ public class VecToolGUI extends JFrame {
                 if (!positionBuffer.isEmpty() && eventPosition.getDistance(positionBuffer.get(0)) < (double) SNAP_THRESHOLD / getWidth()) {
                     previousTool = PolygonCommand.class;
                     addPolygon();
+                    menuBar.undoLastButton.setEnabled(true);
                     positionBuffer.clear();
                 } else {
                     activeTool = PolygonCommand.class;
@@ -590,16 +592,19 @@ public class VecToolGUI extends JFrame {
                 previousTool = LineCommand.class;
                 positionBuffer.add(eventPosition);
                 addLine();
+                menuBar.undoLastButton.setEnabled(true);
                 positionBuffer.clear();
             } else if (toolbar.toolSelector.rectangleToolButton.isSelected() && positionBuffer.size() == 1) {
                 previousTool = RectangleCommand.class;
                 positionBuffer.add(eventPosition);
                 addRectangle();
+                menuBar.undoLastButton.setEnabled(true);
                 positionBuffer.clear();
             } else if (toolbar.toolSelector.ellipseToolButton.isSelected() && positionBuffer.size() == 1) {
                 previousTool = EllipseCommand.class;
                 positionBuffer.add(eventPosition);
                 addEllipse();
+                menuBar.undoLastButton.setEnabled(true);
                 positionBuffer.clear();
             }
         }

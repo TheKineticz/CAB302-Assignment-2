@@ -1,18 +1,18 @@
 package thekineticz.vectool.gui;
 
 import thekineticz.vectool.VecTool;
-import thekineticz.vectool.exception.*;
+import thekineticz.vectool.exception.VecCommandException;
 import thekineticz.vectool.vec.VecFile;
 import thekineticz.vectool.vec.commands.*;
 import thekineticz.vectool.vec.common.Position;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * VecTool GUI main class.
@@ -72,7 +72,7 @@ public class VecToolGUI extends JFrame {
     /**
      * Removes an existing canvas from the canvas panel.
      */
-    private void removeCanvas(){
+    private void removeCanvas() {
         canvasPanel.remove(vecCanvas);
         canvasPanel.revalidate();
         canvasPanel.repaint();
@@ -83,7 +83,7 @@ public class VecToolGUI extends JFrame {
      *
      * @param vecFile The VecFile to draw on the canvas.
      */
-    private void createCanvas(VecFile vecFile){
+    private void createCanvas(VecFile vecFile) {
         VecCanvasEditor editor = new VecCanvasEditor();
 
         vecCanvas = new VecCanvas(vecFile, editor);
@@ -98,7 +98,7 @@ public class VecToolGUI extends JFrame {
      *
      * @return Whether the process can proceed.
      */
-    private boolean promptToSave(){
+    private boolean promptToSave() {
         Object[] options = {"Save", "Don't Save", "Cancel"};
         int choice = JOptionPane.showOptionDialog(
                 this,
@@ -112,19 +112,18 @@ public class VecToolGUI extends JFrame {
         );
 
         //Ready to proceed if file successfully saves or user chooses not to save.
-        if (choice == JOptionPane.OK_OPTION){
+        if (choice == JOptionPane.OK_OPTION) {
             return vecFile.isNewFile() ? saveVecFileAs() : saveVecFile();
-        }
-        else return choice != JOptionPane.CANCEL_OPTION;
+        } else return choice != JOptionPane.CANCEL_OPTION;
     }
 
     /**
      * Prompt to save existing file, the deregister the GUI instance and close the application.
      */
-    private void exitGUI(){
+    private void exitGUI() {
         //Intercept the window close operation if we have an unsaved file.
-        if (vecFile != null && !vecFile.isSaved()){
-            if (!promptToSave()){
+        if (vecFile != null && !vecFile.isSaved()) {
+            if (!promptToSave()) {
                 return;
             }
         }
@@ -138,12 +137,11 @@ public class VecToolGUI extends JFrame {
      *
      * @return Whether the operation was successful.
      */
-    private boolean saveVecFile(){
+    private boolean saveVecFile() {
         try {
             vecFile.save();
             return true;
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(
                     this,
                     "An error occurred while trying to save the file.\nPlease save to a new location.",
@@ -162,13 +160,13 @@ public class VecToolGUI extends JFrame {
      *
      * @return Whether the operation was successful.
      */
-    private boolean saveVecFileAs(){
+    private boolean saveVecFileAs() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
         fileChooser.setSelectedFile(new File(String.format("%s.%s", vecFile.getFilename(), VecFile.FILE_EXTENSION)));
         fileChooser.setFileFilter(FILE_FILTER);
 
-        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
 
             try {
@@ -176,8 +174,7 @@ public class VecToolGUI extends JFrame {
                 setTitle(String.format("%s - %s", vecFile.getFilename(), TITLE));
                 menuBar.saveFileButton.setEnabled(true);
                 return true;
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 JOptionPane.showMessageDialog(
                         this,
                         "IO Error while writing to file.",
@@ -194,14 +191,14 @@ public class VecToolGUI extends JFrame {
     /**
      * Prompt to save existing file and create a new VecFile.
      */
-    private void createNewVecFile(){
-        if (vecFile != null && !vecFile.isSaved()){
-            if (!promptToSave()){
+    private void createNewVecFile() {
+        if (vecFile != null && !vecFile.isSaved()) {
+            if (!promptToSave()) {
                 return;
             }
         }
 
-        if (vecCanvas != null){
+        if (vecCanvas != null) {
             removeCanvas();
         }
 
@@ -219,21 +216,21 @@ public class VecToolGUI extends JFrame {
     /**
      * Prompt to save existing file and start prompt to open an existing vec file.
      */
-    private void openVecFile(){
+    private void openVecFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileFilter(FILE_FILTER);
 
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
 
-            if (vecFile != null && !vecFile.isSaved()){
-                if (!promptToSave()){
+            if (vecFile != null && !vecFile.isSaved()) {
+                if (!promptToSave()) {
                     return;
                 }
             }
 
-            if (vecCanvas != null){
+            if (vecCanvas != null) {
                 removeCanvas();
             }
 
@@ -249,16 +246,14 @@ public class VecToolGUI extends JFrame {
                 toolbar.colourSelector.setFillColour(ColourHexConverter.hex2rgb(vecFile.getLatestFillColour()));
 
                 createCanvas(vecFile);
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 JOptionPane.showMessageDialog(
                         this,
                         String.format("Invalid line in file.\nError: %s", e.getMessage()),
                         "Error in file",
                         JOptionPane.ERROR_MESSAGE
                 );
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 JOptionPane.showMessageDialog(
                         this,
                         "IO Error while reading from file.",
@@ -272,14 +267,14 @@ public class VecToolGUI extends JFrame {
     /**
      * Prompt to save existing file and close file.
      */
-    private void closeVecFile(){
-        if (vecFile != null && !vecFile.isSaved()){
-            if (!promptToSave()){
+    private void closeVecFile() {
+        if (vecFile != null && !vecFile.isSaved()) {
+            if (!promptToSave()) {
                 return;
             }
         }
 
-        if (vecCanvas != null){
+        if (vecCanvas != null) {
             removeCanvas();
         }
 
@@ -311,7 +306,7 @@ public class VecToolGUI extends JFrame {
         /**
          * Creates a new menu bar.
          */
-        VecToolGUIMenuBar(){
+        VecToolGUIMenuBar() {
             //Setup File menu
             fileMenu = new JMenu("File");
             fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -319,16 +314,16 @@ public class VecToolGUI extends JFrame {
             newFileButton = new JMenuItem("New");
             newFileButton.setMnemonic(KeyEvent.VK_N);
             newFileButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-            newFileButton.addActionListener(this );
+            newFileButton.addActionListener(this);
 
             openFileButton = new JMenuItem("Open");
             openFileButton.setMnemonic(KeyEvent.VK_O);
             openFileButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-            openFileButton.addActionListener(this );
+            openFileButton.addActionListener(this);
 
             closeFileButton = new JMenuItem("Close File");
             closeFileButton.setMnemonic(KeyEvent.VK_C);
-            closeFileButton.addActionListener(this );
+            closeFileButton.addActionListener(this);
             closeFileButton.setEnabled(false);
 
             saveFileButton = new JMenuItem("Save");
@@ -345,7 +340,7 @@ public class VecToolGUI extends JFrame {
 
             exitButton = new JMenuItem("Exit");
             exitButton.setMnemonic(KeyEvent.VK_X);
-            exitButton.addActionListener(this );
+            exitButton.addActionListener(this);
 
             fileMenu.add(newFileButton);
             fileMenu.add(openFileButton);
@@ -369,7 +364,8 @@ public class VecToolGUI extends JFrame {
             editMenu.add(undoLastButton);
 
             //Setup menu bar
-            add(fileMenu); add(editMenu);
+            add(fileMenu);
+            add(editMenu);
         }
 
         /**
@@ -378,28 +374,22 @@ public class VecToolGUI extends JFrame {
          *
          * @param event The event that occurred.
          */
-        public void actionPerformed(ActionEvent event){
-            if (event.getSource() == newFileButton){
+        public void actionPerformed(ActionEvent event) {
+            if (event.getSource() == newFileButton) {
                 createNewVecFile();
-            }
-            else if (event.getSource() == openFileButton){
+            } else if (event.getSource() == openFileButton) {
                 openVecFile();
-            }
-            else if (event.getSource() == closeFileButton){
+            } else if (event.getSource() == closeFileButton) {
                 closeVecFile();
-            }
-            else if (event.getSource() == saveFileButton){
+            } else if (event.getSource() == saveFileButton) {
                 saveVecFile();
-            }
-            else if (event.getSource() == saveAsFileButton){
+            } else if (event.getSource() == saveAsFileButton) {
                 saveVecFileAs();
-            }
-            else if (event.getSource() == undoLastButton){
+            } else if (event.getSource() == undoLastButton) {
                 vecFile.undoLatestCommand();
                 vecCanvas.repaint();
                 undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
-            }
-            else if (event.getSource() == exitButton){
+            } else if (event.getSource() == exitButton) {
                 exitGUI();
             }
         }
@@ -410,17 +400,16 @@ public class VecToolGUI extends JFrame {
      */
     class VecCanvasEditor implements MouseListener, MouseMotionListener {
 
+        private static final int SNAP_THRESHOLD = 10;
         private Class previousTool;
         private Class activeTool;
         private Position mousePosition;
-        private static final int SNAP_THRESHOLD = 10;
-
         private ArrayList<Position> positionBuffer;
 
         /**
          * Create a new VecCanvasEditor object.
          */
-        VecCanvasEditor(){
+        VecCanvasEditor() {
             previousTool = null;
             positionBuffer = new ArrayList<>();
         }
@@ -430,47 +419,56 @@ public class VecToolGUI extends JFrame {
          *
          * @return The VecCommand class corresponding to the currently active tool.
          */
-        Class getActiveTool() { return activeTool; }
+        Class getActiveTool() {
+            return activeTool;
+        }
 
         /**
          * Gets the internal position buffer.
          *
          * @return The internal position buffer of a VecCommand being formed.
          */
-        ArrayList<Position> getPositionBuffer(){ return positionBuffer; }
+        ArrayList<Position> getPositionBuffer() {
+            return positionBuffer;
+        }
 
         /**
          * Get the position of the mouse on the canvas.
          *
          * @return The position of the mouse on the canvas.
          */
-        Position getMousePosition(){ return mousePosition; }
+        Position getMousePosition() {
+            return mousePosition;
+        }
 
         /**
          * Get the pen colour as currently selected in the colour selector.
          *
          * @return The pen colour.
          */
-        Color getNextPenColour(){ return toolbar.colourSelector.getPenColour(); }
+        Color getNextPenColour() {
+            return toolbar.colourSelector.getPenColour();
+        }
 
         /**
          * Get the fill colour as currently selected in the colour selector.
          *
          * @return The fill colour.
          */
-        Color getNextFillColour(){ return toolbar.colourSelector.getFillColour(); }
+        Color getNextFillColour() {
+            return toolbar.colourSelector.getFillColour();
+        }
 
         /**
          * Add a plot command to the VecFile based on a position and the current colour values.
          *
          * @param position The position of the plot.
          */
-        private void addPlot(Position position){
+        private void addPlot(Position position) {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new PlotCommand(position));
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 e.printStackTrace();
             }
 
@@ -480,12 +478,11 @@ public class VecToolGUI extends JFrame {
         /**
          * Add a line command to the VecFile based on the internal position buffer and the current colour values.
          */
-        private void addLine(){
+        private void addLine() {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new LineCommand(new ArrayList<>(positionBuffer)));
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 e.printStackTrace();
             }
 
@@ -495,13 +492,12 @@ public class VecToolGUI extends JFrame {
         /**
          * Add a rectangle command to the VecFile based on the internal position buffer and the current colour values.
          */
-        private void addRectangle(){
+        private void addRectangle() {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
                 vecFile.addCommand(new RectangleCommand(new ArrayList<>(positionBuffer)));
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 e.printStackTrace();
             }
 
@@ -511,13 +507,12 @@ public class VecToolGUI extends JFrame {
         /**
          * Add an ellipse command to the VecFile based on the internal position buffer and the current colour values.
          */
-        private void addEllipse(){
+        private void addEllipse() {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
                 vecFile.addCommand(new EllipseCommand(new ArrayList<>(positionBuffer)));
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 e.printStackTrace();
             }
 
@@ -527,13 +522,12 @@ public class VecToolGUI extends JFrame {
         /**
          * Add a polygon command to the VecFile based on the internal position buffer and the current colour values.
          */
-        private void addPolygon(){
+        private void addPolygon() {
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
                 vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
                 vecFile.addCommand(new PolygonCommand(new ArrayList<>(positionBuffer)));
-            }
-            catch (VecCommandException e){
+            } catch (VecCommandException e) {
                 e.printStackTrace();
             }
 
@@ -548,38 +542,33 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mousePressed(MouseEvent event){
-            if (previousTool != null && !previousTool.equals(activeTool)){
+        public void mousePressed(MouseEvent event) {
+            if (previousTool != null && !previousTool.equals(activeTool)) {
                 positionBuffer.clear();
             }
 
-            Position eventPosition = new Position((double)event.getX() / vecCanvas.getWidth(), (double)event.getY() / vecCanvas.getHeight());
+            Position eventPosition = new Position((double) event.getX() / vecCanvas.getWidth(), (double) event.getY() / vecCanvas.getHeight());
 
-            if (toolbar.toolSelector.plotToolButton.isSelected()){
+            if (toolbar.toolSelector.plotToolButton.isSelected()) {
                 previousTool = PlotCommand.class;
                 activeTool = PlotCommand.class;
                 addPlot(eventPosition);
-            }
-            else if (toolbar.toolSelector.lineToolButton.isSelected()) {
+            } else if (toolbar.toolSelector.lineToolButton.isSelected()) {
                 activeTool = LineCommand.class;
                 positionBuffer.add(eventPosition);
-            }
-            else if (toolbar.toolSelector.rectangleToolButton.isSelected()) {
+            } else if (toolbar.toolSelector.rectangleToolButton.isSelected()) {
                 activeTool = RectangleCommand.class;
                 positionBuffer.add(eventPosition);
-            }
-            else if (toolbar.toolSelector.ellipseToolButton.isSelected()) {
+            } else if (toolbar.toolSelector.ellipseToolButton.isSelected()) {
                 activeTool = EllipseCommand.class;
                 positionBuffer.add(eventPosition);
-            }
-            else if (toolbar.toolSelector.polygonToolButton.isSelected()){
+            } else if (toolbar.toolSelector.polygonToolButton.isSelected()) {
                 activeTool = PolygonCommand.class;
-                if (!positionBuffer.isEmpty() && eventPosition.getDistance(positionBuffer.get(0)) < (double)SNAP_THRESHOLD / getWidth()){
+                if (!positionBuffer.isEmpty() && eventPosition.getDistance(positionBuffer.get(0)) < (double) SNAP_THRESHOLD / getWidth()) {
                     previousTool = PolygonCommand.class;
                     addPolygon();
                     positionBuffer.clear();
-                }
-                else {
+                } else {
                     activeTool = PolygonCommand.class;
                     previousTool = PolygonCommand.class;
                     positionBuffer.add(eventPosition);
@@ -594,22 +583,20 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseReleased(MouseEvent event){
-            Position eventPosition = new Position((double)event.getX() / vecCanvas.getWidth(), (double)event.getY() / vecCanvas.getHeight());
+        public void mouseReleased(MouseEvent event) {
+            Position eventPosition = new Position((double) event.getX() / vecCanvas.getWidth(), (double) event.getY() / vecCanvas.getHeight());
 
             if (toolbar.toolSelector.lineToolButton.isSelected() && positionBuffer.size() == 1) {
                 previousTool = LineCommand.class;
                 positionBuffer.add(eventPosition);
                 addLine();
                 positionBuffer.clear();
-            }
-            else if (toolbar.toolSelector.rectangleToolButton.isSelected() && positionBuffer.size() == 1) {
+            } else if (toolbar.toolSelector.rectangleToolButton.isSelected() && positionBuffer.size() == 1) {
                 previousTool = RectangleCommand.class;
                 positionBuffer.add(eventPosition);
                 addRectangle();
                 positionBuffer.clear();
-            }
-            else if (toolbar.toolSelector.ellipseToolButton.isSelected() && positionBuffer.size() == 1) {
+            } else if (toolbar.toolSelector.ellipseToolButton.isSelected() && positionBuffer.size() == 1) {
                 previousTool = EllipseCommand.class;
                 positionBuffer.add(eventPosition);
                 addEllipse();
@@ -625,27 +612,23 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseDragged(MouseEvent event){
-            mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
+        public void mouseDragged(MouseEvent event) {
+            mousePosition = new Position((double) event.getX() / vecCanvas.getWidth(), (double) event.getY() / vecCanvas.getHeight());
 
-            if (toolbar.toolSelector.plotToolButton.isSelected()){
+            if (toolbar.toolSelector.plotToolButton.isSelected()) {
                 activeTool = PlotCommand.class;
                 addPlot(mousePosition);
                 vecCanvas.repaint();
-            }
-            else if (toolbar.toolSelector.lineToolButton.isSelected()){
+            } else if (toolbar.toolSelector.lineToolButton.isSelected()) {
                 activeTool = LineCommand.class;
                 vecCanvas.repaint();
-            }
-            else if (toolbar.toolSelector.rectangleToolButton.isSelected()){
+            } else if (toolbar.toolSelector.rectangleToolButton.isSelected()) {
                 activeTool = RectangleCommand.class;
                 vecCanvas.repaint();
-            }
-            else if (toolbar.toolSelector.ellipseToolButton.isSelected()){
+            } else if (toolbar.toolSelector.ellipseToolButton.isSelected()) {
                 activeTool = EllipseCommand.class;
                 vecCanvas.repaint();
-            }
-            else if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()){
+            } else if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()) {
                 activeTool = PolygonCommand.class;
                 vecCanvas.repaint();
             }
@@ -658,10 +641,10 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseMoved(MouseEvent event){
-            mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
+        public void mouseMoved(MouseEvent event) {
+            mousePosition = new Position((double) event.getX() / vecCanvas.getWidth(), (double) event.getY() / vecCanvas.getHeight());
 
-            if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()){
+            if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()) {
                 activeTool = PolygonCommand.class;
                 vecCanvas.repaint();
             }
@@ -673,7 +656,8 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseEntered(MouseEvent event){}
+        public void mouseEntered(MouseEvent event) {
+        }
 
         /**
          * Unused interface function.
@@ -681,7 +665,8 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseExited(MouseEvent event){}
+        public void mouseExited(MouseEvent event) {
+        }
 
         /**
          * Unused interface function.
@@ -689,6 +674,7 @@ public class VecToolGUI extends JFrame {
          * @param event A MouseEvent (automatically passed)
          */
         @Override
-        public void mouseClicked(MouseEvent event){}
+        public void mouseClicked(MouseEvent event) {
+        }
     }
 }

@@ -14,15 +14,15 @@ public class ShapeCommand extends VecCommand {
     /**
      * Construts a new shape command.
      *
-     * @param commandName The name of the command being created.
-     * @param positions The positions array of the command.
+     * @param commandName       The name of the command being created.
+     * @param positions         The positions array of the command.
      * @param requiredPositions The amount of positions a command of the given type requires.
      * @throws VecCommandException Thrown if the amount of positions present in positions does not match requiredPositions.
      */
     public ShapeCommand(String commandName, ArrayList<Position> positions, int requiredPositions) throws VecCommandException {
         super(commandName);
 
-        if (positions.size() != requiredPositions){
+        if (positions.size() != requiredPositions) {
             throw new VecCommandException(String.format("%s command must contain %d positions.", commandName, requiredPositions));
         }
 
@@ -34,7 +34,7 @@ public class ShapeCommand extends VecCommand {
      *
      * @return The positions of the shape.
      */
-    public ArrayList<Position> getPositions(){
+    public ArrayList<Position> getPositions() {
         return positions;
     }
 
@@ -44,9 +44,9 @@ public class ShapeCommand extends VecCommand {
      * @return The position arguments of the shape command in string form.
      */
     @Override
-    public String getArgs(){
+    public String getArgs() {
         StringBuilder string = new StringBuilder(positions.get(0).toString());
-        for (int i = 1; i < positions.size(); i++){
+        for (int i = 1; i < positions.size(); i++) {
             string.append(" ");
             string.append(positions.get(i).toString());
         }

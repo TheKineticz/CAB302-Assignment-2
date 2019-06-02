@@ -6,7 +6,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Tool bar class for selecting colours.
@@ -19,7 +22,7 @@ class VecColourSelector extends JToolBar {
     /**
      * Constructs a new VecColourSelector bar.
      */
-    VecColourSelector(){
+    VecColourSelector() {
         //Set up layout
         setFloatable(false);
         setLayout(new GridBagLayout());
@@ -37,9 +40,16 @@ class VecColourSelector extends JToolBar {
     /**
      * Resets the colour selector buttons to their default colours.
      */
-    void reset(){
+    void reset() {
         setPenColour(penColourButton.DEFAULT_COLOUR);
         setFillColour(fillColourButton.DEFAULT_COLOUR);
+    }
+
+    /**
+     * Gets the pen colour.
+     */
+    Color getPenColour() {
+        return penColourButton.getColour();
     }
 
     /**
@@ -47,8 +57,15 @@ class VecColourSelector extends JToolBar {
      *
      * @param colour The colour.
      */
-    void setPenColour(Color colour){
+    void setPenColour(Color colour) {
         penColourButton.setColour(colour);
+    }
+
+    /**
+     * Gets the fill colour.
+     */
+    Color getFillColour() {
+        return fillColourButton.getColour();
     }
 
     /**
@@ -56,22 +73,8 @@ class VecColourSelector extends JToolBar {
      *
      * @param colour The colour.
      */
-    void setFillColour(Color colour){
+    void setFillColour(Color colour) {
         fillColourButton.setColour(colour);
-    }
-
-    /**
-     * Gets the pen colour.
-     */
-    Color getPenColour(){
-        return penColourButton.getColour();
-    }
-
-    /**
-     * Gets the fill colour.
-     */
-    Color getFillColour(){
-        return fillColourButton.getColour();
     }
 
     /**
@@ -81,24 +84,22 @@ class VecColourSelector extends JToolBar {
 
         private final Dimension BUTTON_SIZE = new Dimension(32, 32);
         private final Color DEFAULT_COLOUR;
-        private Color currentColour;
-        private boolean canBeNull;
-
         private final Border STANDARD_BUTTON_BORDER = BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 1), new LineBorder(Color.WHITE, 1));
         private final Border HOVERED_BUTTON_BORDER = BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 1), new LineBorder(Color.LIGHT_GRAY, 1));
-
         JButton button;
         JLabel label;
+        private Color currentColour;
+        private boolean canBeNull;
 
         /**
          * Create a new ColourSelectorButton.
          *
-         * @param label The label that will be drawn under the colour button.
-         * @param tooltip The tooltip that will be displayed when hovering over the button.
+         * @param label         The label that will be drawn under the colour button.
+         * @param tooltip       The tooltip that will be displayed when hovering over the button.
          * @param defaultColour The default colour for the object.
-         * @param canBeNull Whether the colour argument can be null (OFF).
+         * @param canBeNull     Whether the colour argument can be null (OFF).
          */
-        ColourSelectorButton(String label, String tooltip, Color defaultColour, boolean canBeNull){
+        ColourSelectorButton(String label, String tooltip, Color defaultColour, boolean canBeNull) {
 
             DEFAULT_COLOUR = defaultColour;
             this.canBeNull = canBeNull;
@@ -138,8 +139,8 @@ class VecColourSelector extends JToolBar {
                 }
 
                 @Override
-                public void mouseClicked(MouseEvent e){
-                    if (SwingUtilities.isRightMouseButton(e)){
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
                         setColour(DEFAULT_COLOUR);
                     }
                 }
@@ -154,22 +155,22 @@ class VecColourSelector extends JToolBar {
         }
 
         /**
-         * Set the colour of the colour selector.
-         *
-         * @param colour The colour.
-         */
-        void setColour(Color colour){
-            button.setBackground(colour);
-            currentColour = colour;
-        }
-
-        /**
          * Gets the colour of the colour selector.
          *
          * @return The colour of the colour selector.
          */
-        public Color getColour(){
+        public Color getColour() {
             return currentColour;
+        }
+
+        /**
+         * Set the colour of the colour selector.
+         *
+         * @param colour The colour.
+         */
+        void setColour(Color colour) {
+            button.setBackground(colour);
+            currentColour = colour;
         }
 
         /**
@@ -177,13 +178,12 @@ class VecColourSelector extends JToolBar {
          *
          * @param event The event that occurred.
          */
-        public void actionPerformed(ActionEvent event){
+        public void actionPerformed(ActionEvent event) {
             Color newColour = JColorChooser.showDialog(null, "Select colour", button.getBackground());
-            if (newColour != null){
-                if (newColour instanceof ColorUIResource && canBeNull){
+            if (newColour != null) {
+                if (newColour instanceof ColorUIResource && canBeNull) {
                     setColour(null);
-                }
-                else {
+                } else {
                     setColour(newColour);
                 }
             }

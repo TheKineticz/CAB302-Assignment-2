@@ -1,7 +1,9 @@
 package thekineticz.vectool.vec.common;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the functionality of the ColourHexMatcher class.
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ColourHexMatcherTest {
 
     @Test
-    public void testInvalidValues(){
+    public void testInvalidValues() {
         assertFalse(ColourHexMatcher.isValid(""));
         assertFalse(ColourHexMatcher.isValid("      "));
         assertFalse(ColourHexMatcher.isValid("a7a7sd"));
@@ -21,7 +23,7 @@ public class ColourHexMatcherTest {
     }
 
     @Test
-    public void testValidValues(){
+    public void testValidValues() {
         assertTrue(ColourHexMatcher.isValid("#012345"));
         assertTrue(ColourHexMatcher.isValid("#6789AB"));
         assertTrue(ColourHexMatcher.isValid("#CDEFFF"));

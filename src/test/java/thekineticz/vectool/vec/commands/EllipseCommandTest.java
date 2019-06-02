@@ -1,11 +1,12 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
 import thekineticz.vectool.vec.common.Position;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the functionality of the EllipseCommand class.
@@ -13,14 +14,14 @@ import java.util.ArrayList;
 public class EllipseCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
-            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+            ArrayList<Position> pc1Pos = new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
             }};
 
-            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+            ArrayList<Position> pc2Pos = new ArrayList<>() {{
                 add(new Position(0.5, 0.5));
                 add(new Position(0.5, 0.3));
             }};
@@ -33,16 +34,16 @@ public class EllipseCommandTest {
     }
 
     @Test
-    public void testValidPositions(){
+    public void testValidPositions() {
         assertDoesNotThrow(() ->
-                new EllipseCommand(new ArrayList<>(){{
+                new EllipseCommand(new ArrayList<>() {{
                     add(new Position(0.2, 0.2));
                     add(new Position(0.8, 0.8));
                 }})
         );
 
         assertDoesNotThrow(() ->
-                new EllipseCommand(new ArrayList<>(){{
+                new EllipseCommand(new ArrayList<>() {{
                     add(new Position(0.0, 0.0));
                     add(new Position(1.0, 1.0));
                 }})
@@ -50,17 +51,17 @@ public class EllipseCommandTest {
     }
 
     @Test
-    public void testInvalidPositions(){
+    public void testInvalidPositions() {
         assertThrows(VecCommandException.class, () -> new EllipseCommand(new ArrayList<>()));
 
         assertThrows(VecCommandException.class, () ->
-                new EllipseCommand(new ArrayList<>(){{
+                new EllipseCommand(new ArrayList<>() {{
                     add(new Position(0.0, 0.0));
                 }})
         );
 
         assertThrows(VecCommandException.class, () ->
-                new EllipseCommand(new ArrayList<>(){{
+                new EllipseCommand(new ArrayList<>() {{
                     add(new Position(0.0, 0.0));
                     add(new Position(0.2, 0.2));
                     add(new Position(0.5, 0.5));
@@ -69,7 +70,7 @@ public class EllipseCommandTest {
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             EllipseCommand.fromString("");
         });
@@ -108,7 +109,7 @@ public class EllipseCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             EllipseCommand.fromString("ELLIPSE 0 0 1 1");
         });
@@ -131,7 +132,7 @@ public class EllipseCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             EllipseCommand ec = EllipseCommand.fromString("ELLIPSE 0.2 0.2 0.5 0.5");
             assertEquals(0.2, ec.getPositions().get(0).getX());
@@ -144,22 +145,21 @@ public class EllipseCommandTest {
             assertEquals(0.0, ec2.getPositions().get(0).getY());
             assertEquals(1.0, ec2.getPositions().get(1).getX());
             assertEquals(1.0, ec2.getPositions().get(1).getY());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
-            EllipseCommand ec = new EllipseCommand(new ArrayList<>(){{
+            EllipseCommand ec = new EllipseCommand(new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
             }});
             assertEquals("ELLIPSE 0.2 0.2 0.8 0.8", ec.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

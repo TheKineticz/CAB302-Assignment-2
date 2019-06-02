@@ -1,7 +1,8 @@
 package thekineticz.vectool.vec.commands;
 
 import thekineticz.vectool.exception.VecCommandException;
-import thekineticz.vectool.vec.common.*;
+import thekineticz.vectool.vec.common.ColourHexMatcher;
+import thekineticz.vectool.vec.common.VecCommand;
 
 /**
  * The internal structure of a fill vec command.
@@ -23,29 +24,11 @@ public class FillCommand extends VecCommand {
     public FillCommand(String colour) throws VecCommandException {
         super(COMMAND_NAME);
 
-        if (!(colour.equals(FILL_OFF) || ColourHexMatcher.isValid(colour))){
+        if (!(colour.equals(FILL_OFF) || ColourHexMatcher.isValid(colour))) {
             throw new VecCommandException(String.format("Invalid colour argument '%s' for %s command.", colour, COMMAND_NAME));
         }
 
         this.colour = colour;
-    }
-
-    /**
-     * Gets the fill colour.
-     *
-     * @return The fill colour.
-     */
-    public String getColour(){
-        return colour;
-    }
-
-    /**
-     * Inherited alias to getColour.
-     *
-     * @return The fill colour.
-     */
-    public String getArgs(){
-        return getColour();
     }
 
     /**
@@ -58,14 +41,32 @@ public class FillCommand extends VecCommand {
     public static FillCommand fromString(String command) throws VecCommandException {
         String[] commandArray = command.split(" ");
 
-        if (commandArray.length - 1 != REQUIRED_ARGUMENTS){
+        if (commandArray.length - 1 != REQUIRED_ARGUMENTS) {
             throw new VecCommandException(String.format("%s command string must contain exactly %d arguments", COMMAND_NAME, REQUIRED_ARGUMENTS));
         }
 
-        if (!commandArray[0].equals(COMMAND_NAME)){
+        if (!commandArray[0].equals(COMMAND_NAME)) {
             throw new VecCommandException("Attempted to generate FillCommand from string with incorrect identifier.");
         }
 
         return new FillCommand(commandArray[1]);
+    }
+
+    /**
+     * Gets the fill colour.
+     *
+     * @return The fill colour.
+     */
+    public String getColour() {
+        return colour;
+    }
+
+    /**
+     * Inherited alias to getColour.
+     *
+     * @return The fill colour.
+     */
+    public String getArgs() {
+        return getColour();
     }
 }

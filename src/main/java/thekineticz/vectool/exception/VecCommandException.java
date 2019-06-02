@@ -8,7 +8,7 @@ public class VecCommandException extends Exception {
     /**
      * Creates a standard VecCommandException.
      */
-    public VecCommandException(){
+    public VecCommandException() {
         super();
     }
 
@@ -17,7 +17,7 @@ public class VecCommandException extends Exception {
      *
      * @param message The error message.
      */
-    public VecCommandException(String message){
+    public VecCommandException(String message) {
         super(message);
     }
 
@@ -26,7 +26,7 @@ public class VecCommandException extends Exception {
      *
      * @param cause The original exception.
      */
-    public VecCommandException(Throwable cause){
+    public VecCommandException(Throwable cause) {
         super(cause);
     }
 
@@ -34,9 +34,9 @@ public class VecCommandException extends Exception {
      * Creates a VecCommandException with a custom error message and the original exception that led to it being thrown.
      *
      * @param message The error message.
-     * @param cause The original exception.
+     * @param cause   The original exception.
      */
-    public VecCommandException(String message, Throwable cause){
+    public VecCommandException(String message, Throwable cause) {
         super(message, cause);
     }
 }

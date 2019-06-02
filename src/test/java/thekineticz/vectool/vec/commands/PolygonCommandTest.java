@@ -1,12 +1,13 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
 import thekineticz.vectool.vec.common.Position;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the functionality of the PolygonCommand class.
@@ -14,16 +15,16 @@ import java.util.Random;
 public class PolygonCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
-            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+            ArrayList<Position> pc1Pos = new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
                 add(new Position(0.1, 0.1));
                 add(new Position(0.2, 0.3));
             }};
 
-            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+            ArrayList<Position> pc2Pos = new ArrayList<>() {{
                 add(new Position(0.5, 0.5));
                 add(new Position(0.5, 0.3));
             }};
@@ -36,9 +37,9 @@ public class PolygonCommandTest {
     }
 
     @Test
-    public void testValidPositions(){
+    public void testValidPositions() {
         assertDoesNotThrow(() ->
-                new PolygonCommand(new ArrayList<>(){{
+                new PolygonCommand(new ArrayList<>() {{
                     add(new Position(0.0, 0.0));
                     add(new Position(0.0, 1.0));
                     add(new Position(1.0, 1.0));
@@ -47,7 +48,7 @@ public class PolygonCommandTest {
         );
 
         assertDoesNotThrow(() ->
-                new PolygonCommand(new ArrayList<>(){{
+                new PolygonCommand(new ArrayList<>() {{
                     add(new Position(0.2, 0.2));
                     add(new Position(0.5, 0.8));
                     add(new Position(0.8, 0.2));
@@ -56,12 +57,12 @@ public class PolygonCommandTest {
     }
 
     @Test
-    public void testInvalidPositions(){
+    public void testInvalidPositions() {
         assertThrows(VecCommandException.class, () -> new PolygonCommand(new ArrayList<>()));
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             PolygonCommand.fromString("");
         });
@@ -100,7 +101,7 @@ public class PolygonCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             PolygonCommand.fromString("POLYGON 0 0 1 1");
         });
@@ -124,9 +125,9 @@ public class PolygonCommandTest {
             int n = 2 + rand.nextInt(98);
             n = n % 2 == 0 ? n : n + 1;
 
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 string.append(" ");
-                string.append(((Double)rand.nextDouble()).toString());
+                string.append(((Double) rand.nextDouble()).toString());
             }
 
             PolygonCommand.fromString(string.toString());
@@ -134,7 +135,7 @@ public class PolygonCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             PolygonCommand pc = PolygonCommand.fromString("POLYGON 0.2 0.2 0.5 0.5 0.7 0.7");
             assertEquals(0.2, pc.getVertices().get(0).getX());
@@ -151,23 +152,22 @@ public class PolygonCommandTest {
             assertEquals(1.0, pc2.getVertices().get(1).getY());
             assertEquals(0.3, pc2.getVertices().get(2).getX());
             assertEquals(0.3, pc2.getVertices().get(2).getY());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
-            PolygonCommand pc = new PolygonCommand(new ArrayList<>(){{
+            PolygonCommand pc = new PolygonCommand(new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
                 add(new Position(0.334, 0.32));
             }});
             assertEquals("POLYGON 0.2 0.2 0.8 0.8 0.334 0.32", pc.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

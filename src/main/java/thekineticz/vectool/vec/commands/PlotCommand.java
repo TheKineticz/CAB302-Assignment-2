@@ -1,7 +1,8 @@
 package thekineticz.vectool.vec.commands;
 
 import thekineticz.vectool.exception.VecCommandException;
-import thekineticz.vectool.vec.common.*;
+import thekineticz.vectool.vec.common.Position;
+import thekineticz.vectool.vec.common.VecCommand;
 
 /**
  * The internal structure of a plot vec command.
@@ -18,27 +19,9 @@ public class PlotCommand extends VecCommand {
      *
      * @param position The position of the plot.
      */
-    public PlotCommand(Position position){
+    public PlotCommand(Position position) {
         super(COMMAND_NAME);
         this.position = position;
-    }
-
-    /**
-     * Get the position of the plot.
-     *
-     * @return The position of the plot.
-     */
-    public Position getPosition(){
-        return position;
-    }
-
-    /**
-     * Get the arguments of the plot command.
-     *
-     * @return The position of the plot in string form.
-     */
-    public String getArgs(){
-        return position.toString();
     }
 
     /**
@@ -52,12 +35,12 @@ public class PlotCommand extends VecCommand {
         String[] commandArray = command.split(" ");
 
         //Check the input string for valid amount of arguments
-        if (commandArray.length - 1 != REQUIRED_POSITION_VALUES){
+        if (commandArray.length - 1 != REQUIRED_POSITION_VALUES) {
             throw new VecCommandException(String.format("%s command string must contain %d arguments, separated by a space.", COMMAND_NAME, REQUIRED_POSITION_VALUES + 1));
         }
 
         //Check the input string for valid identifier
-        if (!commandArray[0].equals(COMMAND_NAME)){
+        if (!commandArray[0].equals(COMMAND_NAME)) {
             throw new VecCommandException("Attempted to generate PlotCommand from string with incorrect identifier.");
         }
 
@@ -67,11 +50,28 @@ public class PlotCommand extends VecCommand {
         try {
             x = Double.valueOf(commandArray[1]);
             y = Double.valueOf(commandArray[2]);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new VecCommandException(String.format("Attempted to parse invalid argument for %s command position.", COMMAND_NAME), e);
         }
 
         return new PlotCommand(new Position(x, y));
+    }
+
+    /**
+     * Get the position of the plot.
+     *
+     * @return The position of the plot.
+     */
+    public Position getPosition() {
+        return position;
+    }
+
+    /**
+     * Get the arguments of the plot command.
+     *
+     * @return The position of the plot in string form.
+     */
+    public String getArgs() {
+        return position.toString();
     }
 }

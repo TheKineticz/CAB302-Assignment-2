@@ -1,9 +1,9 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
-
 import thekineticz.vectool.vec.common.Position;
-import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlotCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
             PlotCommand pc1 = new PlotCommand(new Position(0.5, 0.5));
             PlotCommand pc2 = new PlotCommand(new Position(0.7, 0.3));
@@ -22,7 +22,7 @@ public class PlotCommandTest {
     }
 
     @Test
-    public void testGetArgs(){
+    public void testGetArgs() {
         PlotCommand pc1 = new PlotCommand(new Position(0.5, 0.5));
         PlotCommand pc2 = new PlotCommand(new Position(0.7, 0.3));
 
@@ -31,7 +31,7 @@ public class PlotCommandTest {
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             PlotCommand.fromString("");
         });
@@ -66,7 +66,7 @@ public class PlotCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             PlotCommand.fromString("PLOT 0 0");
         });
@@ -93,7 +93,7 @@ public class PlotCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             PlotCommand pc = PlotCommand.fromString("PLOT 0.5 0.5");
             assertEquals(0.5, pc.getPosition().getX());
@@ -102,19 +102,18 @@ public class PlotCommandTest {
             PlotCommand pc2 = PlotCommand.fromString("PLOT 0 0");
             assertEquals(0.0, pc2.getPosition().getX());
             assertEquals(0.0, pc2.getPosition().getY());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
             PlotCommand pc = new PlotCommand(new Position(0.5, 0.5));
             assertEquals("PLOT 0.5 0.5", pc.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

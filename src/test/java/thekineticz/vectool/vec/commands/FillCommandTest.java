@@ -1,14 +1,14 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
 
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FillCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
             FillCommand fc1 = new FillCommand("#FF00FF");
             FillCommand fc2 = new FillCommand("#FF0000");
@@ -19,7 +19,7 @@ public class FillCommandTest {
     }
 
     @Test
-    public void testGetArgs(){
+    public void testGetArgs() {
         assertDoesNotThrow(() -> {
             FillCommand fc1 = new FillCommand("#FF00FF");
             FillCommand fc2 = new FillCommand("#FF0000");
@@ -32,7 +32,7 @@ public class FillCommandTest {
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             FillCommand.fromString("");
         });
@@ -79,7 +79,7 @@ public class FillCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             FillCommand.fromString("FILL #FF00FA");
         });
@@ -102,7 +102,7 @@ public class FillCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             FillCommand fc = FillCommand.fromString("FILL #FF0000");
             assertEquals("#FF0000", fc.getColour());
@@ -112,22 +112,21 @@ public class FillCommandTest {
 
             FillCommand fc3 = FillCommand.fromString(String.format("FILL %s", FillCommand.FILL_OFF));
             assertEquals(FillCommand.FILL_OFF, fc3.getColour());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
             FillCommand pc = new FillCommand("#Ff0032");
             assertEquals("FILL #Ff0032", pc.toString());
 
             FillCommand pc2 = new FillCommand(FillCommand.FILL_OFF);
             assertEquals(String.format("FILL %s", FillCommand.FILL_OFF), pc2.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

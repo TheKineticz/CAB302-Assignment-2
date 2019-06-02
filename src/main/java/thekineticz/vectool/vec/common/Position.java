@@ -13,7 +13,7 @@ public class Position {
      * @param x The first element of the pair.
      * @param y The second element of the pair.
      */
-    public Position(Double x, Double y){
+    public Position(Double x, Double y) {
         this.x = x;
         this.y = y;
     }
@@ -23,7 +23,7 @@ public class Position {
      *
      * @return The first element of the pair.
      */
-    public Double getX(){
+    public Double getX() {
         return x;
     }
 
@@ -32,7 +32,7 @@ public class Position {
      *
      * @return The second element of the pair.
      */
-    public Double getY(){
+    public Double getY() {
         return y;
     }
 
@@ -42,7 +42,7 @@ public class Position {
      * @return The hash code of the pair.
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return x.hashCode() ^ y.hashCode();
     }
 
@@ -53,8 +53,8 @@ public class Position {
      * @return The equality value.
      */
     @Override
-    public boolean equals(Object o){
-        if (!(o instanceof Position)){
+    public boolean equals(Object o) {
+        if (!(o instanceof Position)) {
             return false;
         }
 
@@ -68,7 +68,7 @@ public class Position {
      * @param pos2 Another position.
      * @return The distance between the points.
      */
-    public double getDistance(Position pos2){
+    public double getDistance(Position pos2) {
         return Math.sqrt(Math.pow(pos2.getX() - getX(), 2) + Math.pow(pos2.getY() - getY(), 2));
     }
 
@@ -78,7 +78,7 @@ public class Position {
      * @return The pair in string form.
      */
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%s %s", x.toString(), y.toString());
     }
 }

@@ -1,11 +1,12 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
 import thekineticz.vectool.vec.common.Position;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the functionality of the LineCommand class.
@@ -13,14 +14,14 @@ import java.util.ArrayList;
 public class LineCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
-            ArrayList<Position> pc1Pos = new ArrayList<>(){{
+            ArrayList<Position> pc1Pos = new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
             }};
 
-            ArrayList<Position> pc2Pos = new ArrayList<>(){{
+            ArrayList<Position> pc2Pos = new ArrayList<>() {{
                 add(new Position(0.5, 0.5));
                 add(new Position(0.5, 0.3));
             }};
@@ -33,34 +34,34 @@ public class LineCommandTest {
     }
 
     @Test
-    public void testValidPositions(){
+    public void testValidPositions() {
         assertDoesNotThrow(() ->
-            new LineCommand(new ArrayList<>(){{
-                add(new Position(0.2, 0.2));
-                add(new Position(0.8, 0.8));
-            }})
+                new LineCommand(new ArrayList<>() {{
+                    add(new Position(0.2, 0.2));
+                    add(new Position(0.8, 0.8));
+                }})
         );
 
         assertDoesNotThrow(() ->
-            new LineCommand(new ArrayList<>(){{
-                add(new Position(0.0, 0.0));
-                add(new Position(1.0, 1.0));
-            }})
+                new LineCommand(new ArrayList<>() {{
+                    add(new Position(0.0, 0.0));
+                    add(new Position(1.0, 1.0));
+                }})
         );
     }
 
     @Test
-    public void testInvalidPositions(){
+    public void testInvalidPositions() {
         assertThrows(VecCommandException.class, () -> new LineCommand(new ArrayList<>()));
 
         assertThrows(VecCommandException.class, () ->
-            new LineCommand(new ArrayList<>(){{
-                add(new Position(0.0, 0.0));
-            }})
+                new LineCommand(new ArrayList<>() {{
+                    add(new Position(0.0, 0.0));
+                }})
         );
 
         assertThrows(VecCommandException.class, () ->
-                new LineCommand(new ArrayList<>(){{
+                new LineCommand(new ArrayList<>() {{
                     add(new Position(0.0, 0.0));
                     add(new Position(0.2, 0.2));
                     add(new Position(0.5, 0.5));
@@ -69,7 +70,7 @@ public class LineCommandTest {
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             LineCommand.fromString("");
         });
@@ -108,7 +109,7 @@ public class LineCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             LineCommand.fromString("LINE 0 0 1 1");
         });
@@ -131,7 +132,7 @@ public class LineCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             LineCommand lc = LineCommand.fromString("LINE 0.2 0.2 0.5 0.5");
             assertEquals(0.2, lc.getPositions().get(0).getX());
@@ -144,22 +145,21 @@ public class LineCommandTest {
             assertEquals(0.0, lc2.getPositions().get(0).getY());
             assertEquals(1.0, lc2.getPositions().get(1).getX());
             assertEquals(1.0, lc2.getPositions().get(1).getY());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
-            LineCommand lc = new LineCommand(new ArrayList<>(){{
+            LineCommand lc = new LineCommand(new ArrayList<>() {{
                 add(new Position(0.2, 0.2));
                 add(new Position(0.8, 0.8));
             }});
             assertEquals("LINE 0.2 0.2 0.8 0.8", lc.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

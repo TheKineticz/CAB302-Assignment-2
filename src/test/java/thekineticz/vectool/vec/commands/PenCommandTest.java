@@ -1,14 +1,14 @@
 package thekineticz.vectool.vec.commands;
 
+import org.junit.jupiter.api.Test;
 import thekineticz.vectool.exception.VecCommandException;
 
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PenCommandTest {
 
     @Test
-    public void testConstruction(){
+    public void testConstruction() {
         assertDoesNotThrow(() -> {
             PenCommand pc1 = new PenCommand("#FF00FF");
             PenCommand pc2 = new PenCommand("#FF0000");
@@ -18,7 +18,7 @@ public class PenCommandTest {
     }
 
     @Test
-    public void testGetArgs(){
+    public void testGetArgs() {
         assertDoesNotThrow(() -> {
             PenCommand pc1 = new PenCommand("#FF00FF");
             PenCommand pc2 = new PenCommand("#FF0000");
@@ -29,7 +29,7 @@ public class PenCommandTest {
     }
 
     @Test
-    public void testFromInvalidStrings(){
+    public void testFromInvalidStrings() {
         assertThrows(VecCommandException.class, () -> {
             PenCommand.fromString("");
         });
@@ -72,7 +72,7 @@ public class PenCommandTest {
     }
 
     @Test
-    public void testFromValidStrings(){
+    public void testFromValidStrings() {
         assertDoesNotThrow(() -> {
             PenCommand.fromString("PEN #FF00FA");
         });
@@ -91,26 +91,25 @@ public class PenCommandTest {
     }
 
     @Test
-    public void testFromStringConversion(){
+    public void testFromStringConversion() {
         try {
             PenCommand pc = PenCommand.fromString("PEN #FF0000");
             assertEquals("#FF0000", pc.getColour());
 
             PenCommand pc2 = PenCommand.fromString("PEN #FFFFFF");
             assertEquals("#FFFFFF", pc2.getColour());
-        }
-        catch (Exception e){
-            e.printStackTrace();;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
         }
     }
 
     @Test
-    public void testToStringConversion(){
+    public void testToStringConversion() {
         try {
             PenCommand pc = new PenCommand("#Ff0032");
             assertEquals("PEN #Ff0032", pc.toString());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

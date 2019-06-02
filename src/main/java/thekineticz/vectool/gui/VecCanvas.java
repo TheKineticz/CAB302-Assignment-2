@@ -22,7 +22,7 @@ class VecCanvas extends JPanel {
      *
      * @param vecFile The VecFile.
      */
-    VecCanvas(VecFile vecFile, VecToolGUI.VecCanvasEditor editor){
+    VecCanvas(VecFile vecFile, VecToolGUI.VecCanvasEditor editor) {
         this.vecFile = vecFile;
         this.editor = editor;
     }
@@ -33,10 +33,10 @@ class VecCanvas extends JPanel {
      * @return The preferred size of the canvas.
      */
     @Override
-    public Dimension getPreferredSize(){
+    public Dimension getPreferredSize() {
         Dimension dim = super.getPreferredSize();
         Container parent = getParent();
-        if (parent != null){
+        if (parent != null) {
             dim = parent.getSize();
         }
 
@@ -53,70 +53,58 @@ class VecCanvas extends JPanel {
      * @param g Graphics parameter; automatically passed during repainting.
      */
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         //Fill background colour
         g.setColor(Color.WHITE);
-        g.fillRect(0 ,0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         Color penColour = Color.BLACK;
         Color fillColour = null;
 
         //Draw the shapes as defined by the VEC file
-        for (VecCommand command : vecFile.getCommands()){
-            if (command instanceof PlotCommand){
-                plotPoint(g, (PlotCommand)command, penColour);
-            }
-            else if (command instanceof LineCommand){
+        for (VecCommand command : vecFile.getCommands()) {
+            if (command instanceof PlotCommand) {
+                plotPoint(g, (PlotCommand) command, penColour);
+            } else if (command instanceof LineCommand) {
                 drawLine(g, ((LineCommand) command).getPositions(), penColour);
-            }
-            else if (command instanceof RectangleCommand){
-                drawRectangle(g, ((RectangleCommand)command).getPositions(), penColour, fillColour);
-            }
-            else if (command instanceof EllipseCommand){
-                drawEllipse(g, ((EllipseCommand)command).getPositions(), penColour, fillColour);
-            }
-            else if (command instanceof PolygonCommand){
-                drawPolygon(g, ((PolygonCommand)command).getVertices(), penColour, fillColour);
-            }
-            else if (command instanceof PenCommand){
+            } else if (command instanceof RectangleCommand) {
+                drawRectangle(g, ((RectangleCommand) command).getPositions(), penColour, fillColour);
+            } else if (command instanceof EllipseCommand) {
+                drawEllipse(g, ((EllipseCommand) command).getPositions(), penColour, fillColour);
+            } else if (command instanceof PolygonCommand) {
+                drawPolygon(g, ((PolygonCommand) command).getVertices(), penColour, fillColour);
+            } else if (command instanceof PenCommand) {
                 penColour = ColourHexConverter.hex2rgb(((PenCommand) command).getColour());
-            }
-            else if (command instanceof FillCommand){
+            } else if (command instanceof FillCommand) {
                 fillColour = ColourHexConverter.hex2rgb(((FillCommand) command).getColour());
             }
         }
 
         //Preview edits from the VecCanvasEditor
-        if (!editor.getPositionBuffer().isEmpty()){
-            if (editor.getActiveTool() == LineCommand.class){
+        if (!editor.getPositionBuffer().isEmpty()) {
+            if (editor.getActiveTool() == LineCommand.class) {
                 ArrayList<Position> positions = new ArrayList<>();
                 positions.add(editor.getPositionBuffer().get(0));
                 positions.add(editor.getMousePosition());
 
                 drawLine(g, positions, editor.getNextPenColour());
-            }
-
-            else if (editor.getActiveTool() == RectangleCommand.class){
+            } else if (editor.getActiveTool() == RectangleCommand.class) {
                 ArrayList<Position> positions = new ArrayList<>();
                 positions.add(editor.getPositionBuffer().get(0));
                 positions.add(editor.getMousePosition());
 
                 drawRectangle(g, positions, editor.getNextPenColour(), editor.getNextFillColour());
-            }
-
-            else if (editor.getActiveTool() == EllipseCommand.class){
+            } else if (editor.getActiveTool() == EllipseCommand.class) {
                 ArrayList<Position> positions = new ArrayList<>();
                 positions.add(editor.getPositionBuffer().get(0));
                 positions.add(editor.getMousePosition());
 
                 drawEllipse(g, positions, editor.getNextPenColour(), editor.getNextFillColour());
-            }
-
-            else if (editor.getActiveTool() == PolygonCommand.class){
-                ArrayList<Position> positions = (ArrayList)editor.getPositionBuffer().clone();
+            } else if (editor.getActiveTool() == PolygonCommand.class) {
+                ArrayList<Position> positions = (ArrayList) editor.getPositionBuffer().clone();
                 positions.add(editor.getMousePosition());
 
-                for (int i = 1; i < positions.size(); i++){
+                for (int i = 1; i < positions.size(); i++) {
                     drawLine(g, new ArrayList<>(positions.subList(i - 1, i + 1)), editor.getNextPenColour());
                 }
             }
@@ -126,14 +114,14 @@ class VecCanvas extends JPanel {
     /**
      * Plots a single pixel on the canvas.
      *
-     * @param g Graphics parameter from paint function.
-     * @param command PlotCommand reference.
+     * @param g         Graphics parameter from paint function.
+     * @param command   PlotCommand reference.
      * @param penColour The colour of the pixel being plotted.
      */
-    private void plotPoint(Graphics g, PlotCommand command, Color penColour){
+    private void plotPoint(Graphics g, PlotCommand command, Color penColour) {
         Position position = command.getPosition();
-        int x = (int)Math.round(getWidth() * position.getX());
-        int y = (int)Math.round(getHeight() * position.getY());
+        int x = (int) Math.round(getWidth() * position.getX());
+        int y = (int) Math.round(getHeight() * position.getY());
 
         g.setColor(penColour);
         g.drawLine(x, y, x, y);
@@ -142,15 +130,15 @@ class VecCanvas extends JPanel {
     /**
      * Draws a line on the canvas.
      *
-     * @param g Graphics parameter from paint function.
+     * @param g         Graphics parameter from paint function.
      * @param positions The line endpoints.
      * @param penColour The colour of the line being drawn.
      */
-    private void drawLine(Graphics g, ArrayList<Position> positions, Color penColour){
-        int x1 = (int)Math.round(getWidth() * positions.get(0).getX());
-        int y1 = (int)Math.round(getHeight() * positions.get(0).getY());
-        int x2 = (int)Math.round(getWidth() * positions.get(1).getX());
-        int y2 = (int)Math.round(getHeight() * positions.get(1).getY());
+    private void drawLine(Graphics g, ArrayList<Position> positions, Color penColour) {
+        int x1 = (int) Math.round(getWidth() * positions.get(0).getX());
+        int y1 = (int) Math.round(getHeight() * positions.get(0).getY());
+        int x2 = (int) Math.round(getWidth() * positions.get(1).getX());
+        int y2 = (int) Math.round(getHeight() * positions.get(1).getY());
 
         g.setColor(penColour);
         g.drawLine(x1, y1, x2, y2);
@@ -159,33 +147,33 @@ class VecCanvas extends JPanel {
     /**
      * Draws a rectangle on the canvas.
      *
-     * @param g Graphics parameter from paint function.
-     * @param positions The rectangle corners.
-     * @param penColour The colour of the rectangle border.
+     * @param g          Graphics parameter from paint function.
+     * @param positions  The rectangle corners.
+     * @param penColour  The colour of the rectangle border.
      * @param fillColour The fill colour of the rectangle.
      */
-    private void drawRectangle(Graphics g, ArrayList<Position> positions, Color penColour, Color fillColour){
-        int x1 = (int)Math.round(getWidth() * positions.get(0).getX());
-        int y1 = (int)Math.round(getHeight() * positions.get(0).getY());
-        int x2 = (int)Math.round(getWidth() * positions.get(1).getX());
-        int y2 = (int)Math.round(getHeight() * positions.get(1).getY());
+    private void drawRectangle(Graphics g, ArrayList<Position> positions, Color penColour, Color fillColour) {
+        int x1 = (int) Math.round(getWidth() * positions.get(0).getX());
+        int y1 = (int) Math.round(getHeight() * positions.get(0).getY());
+        int x2 = (int) Math.round(getWidth() * positions.get(1).getX());
+        int y2 = (int) Math.round(getHeight() * positions.get(1).getY());
 
         //Force (x1, y1) to be top-left and (x2, y2) to be bottom-right
-        if (x1 > x2){
+        if (x1 > x2) {
             //Swap x1 and x2
             x1 += x2;
             x2 = x1 - x2;
             x1 -= x2;
         }
 
-        if (y1 > y2){
+        if (y1 > y2) {
             //Swap y1 and y2
             y1 += y2;
             y2 = y1 - y2;
             y1 -= y2;
         }
 
-        if (fillColour != null){
+        if (fillColour != null) {
             g.setColor(fillColour);
             g.fillRect(x1, y1, x2 - x1, y2 - y1);
         }
@@ -196,33 +184,33 @@ class VecCanvas extends JPanel {
     /**
      * Draws an ellipse on the canvas.
      *
-     * @param g Graphics parameter from paint function.
-     * @param positions The ellipse corners.
-     * @param penColour The colour of the ellipse border.
+     * @param g          Graphics parameter from paint function.
+     * @param positions  The ellipse corners.
+     * @param penColour  The colour of the ellipse border.
      * @param fillColour The fill colour of the ellipse.
      */
-    private void drawEllipse(Graphics g, ArrayList<Position> positions, Color penColour, Color fillColour){
-        int x1 = (int)Math.round(getWidth() * positions.get(0).getX());
-        int y1 = (int)Math.round(getHeight() * positions.get(0).getY());
-        int x2 = (int)Math.round(getWidth() * positions.get(1).getX());
-        int y2 = (int)Math.round(getHeight() * positions.get(1).getY());
+    private void drawEllipse(Graphics g, ArrayList<Position> positions, Color penColour, Color fillColour) {
+        int x1 = (int) Math.round(getWidth() * positions.get(0).getX());
+        int y1 = (int) Math.round(getHeight() * positions.get(0).getY());
+        int x2 = (int) Math.round(getWidth() * positions.get(1).getX());
+        int y2 = (int) Math.round(getHeight() * positions.get(1).getY());
 
         //Force (x1, y1) to be top-left and (x2, y2) to be bottom-right
-        if (x1 > x2){
+        if (x1 > x2) {
             //Swap x1 and x2
             x1 += x2;
             x2 = x1 - x2;
             x1 -= x2;
         }
 
-        if (y1 > y2){
+        if (y1 > y2) {
             //Swap y1 and y2
             y1 += y2;
             y2 = y1 - y2;
             y1 -= y2;
         }
 
-        if (fillColour != null){
+        if (fillColour != null) {
             g.setColor(fillColour);
             g.fillOval(x1, y1, x2 - x1, y2 - y1);
         }
@@ -233,25 +221,25 @@ class VecCanvas extends JPanel {
     /**
      * Draws a polygon on the canvas.
      *
-     * @param g Graphics parameter from paint function.
-     * @param vertices The polygon vertices.
-     * @param penColour The colour of the polygon border.
+     * @param g          Graphics parameter from paint function.
+     * @param vertices   The polygon vertices.
+     * @param penColour  The colour of the polygon border.
      * @param fillColour The fill colour of the polygon.
      */
-    private void drawPolygon(Graphics g, ArrayList<Position> vertices, Color penColour, Color fillColour){
+    private void drawPolygon(Graphics g, ArrayList<Position> vertices, Color penColour, Color fillColour) {
         int n = vertices.size();
         int[] xPoints = new int[n];
         int[] yPoints = new int[n];
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             Position vertex = vertices.get(i);
-            xPoints[i] = (int)Math.round(getWidth() * vertex.getX());
-            yPoints[i] = (int)Math.round(getHeight() * vertex.getY());
+            xPoints[i] = (int) Math.round(getWidth() * vertex.getX());
+            yPoints[i] = (int) Math.round(getHeight() * vertex.getY());
         }
 
         Polygon polygon = new Polygon(xPoints, yPoints, n);
 
-        if (fillColour != null){
+        if (fillColour != null) {
             g.setColor(fillColour);
             g.fillPolygon(polygon);
         }

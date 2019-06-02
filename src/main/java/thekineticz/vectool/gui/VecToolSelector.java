@@ -18,7 +18,7 @@ class VecToolSelector extends JToolBar {
     /**
      * Creates a new VecToolSelector bar.
      */
-    VecToolSelector(){
+    VecToolSelector() {
         //Set up layout
         setFloatable(false);
         setLayout(new GridBagLayout());

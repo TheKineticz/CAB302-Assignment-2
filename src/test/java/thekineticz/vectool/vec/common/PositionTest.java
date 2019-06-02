@@ -1,7 +1,9 @@
 package thekineticz.vectool.vec.common;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests the functionality of the Position class.
@@ -9,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PositionTest {
 
     @Test
-    public void returnsCorrectValues(){
+    public void returnsCorrectValues() {
         Position pos = new Position(2.0, 8.0);
         assertEquals(2, pos.getX());
         assertEquals(8, pos.getY());
     }
 
     @Test
-    public void testEquality(){
+    public void testEquality() {
         Position pos1 = new Position(2.0, 8.0);
         Position pos2 = new Position(-2.0, -8.0);
         Position pos3 = new Position(2.0, 8.0);
@@ -29,7 +31,7 @@ public class PositionTest {
     }
 
     @Test
-    public void testHashEquality(){
+    public void testHashEquality() {
         Position pos1 = new Position(2.0, 8.0);
         Position pos2 = new Position(-2.0, -8.0);
         Position pos3 = new Position(2.0, 8.0);

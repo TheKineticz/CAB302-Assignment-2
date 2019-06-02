@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Regex pattern matcher for validating hexadecimal colour strings.
  */
-public class ColourHexMatcher{
+public class ColourHexMatcher {
 
     private static final String WEB_COLOUR_PATTERN = "^#([A-Fa-f0-9]{6})$";
     private static final Pattern pattern = Pattern.compile(WEB_COLOUR_PATTERN);
@@ -17,7 +17,7 @@ public class ColourHexMatcher{
      * @param colour The input string.
      * @return Whether the input string is valid.
      */
-    public static boolean isValid(String colour){
+    public static boolean isValid(String colour) {
         Matcher matcher;
         matcher = pattern.matcher(colour);
         return matcher.matches();

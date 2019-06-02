@@ -16,8 +16,8 @@ public class VecTool {
      *
      * @throws IllegalStateException Thrown if an instance of the VecTool application is already running.
      */
-    public VecTool(){
-        if (applicationInstance != null){
+    public VecTool() {
+        if (applicationInstance != null) {
             throw new IllegalStateException("Application is already running.");
         }
 
@@ -27,7 +27,7 @@ public class VecTool {
     /**
      * Deregister the instance.
      */
-    public static void close(){
+    public static void close() {
         applicationInstance = null;
     }
 
@@ -36,11 +36,10 @@ public class VecTool {
      *
      * @param args String array arguments (Ignored)
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

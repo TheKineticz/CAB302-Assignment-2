@@ -1,8 +1,8 @@
 package thekineticz.vectool.vec;
 
-import thekineticz.vectool.exception.*;
-import thekineticz.vectool.vec.common.*;
+import thekineticz.vectool.exception.VecCommandException;
 import thekineticz.vectool.vec.commands.*;
+import thekineticz.vectool.vec.common.VecCommand;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class VecFile {
      *
      * @param file The file being imported.
      */
-    public VecFile(File file) throws VecCommandException, IOException{
+    public VecFile(File file) throws VecCommandException, IOException {
         this.directory = file.getParent();
         this.filename = removeExtension(file.getName());
         isSaved = true;
@@ -41,22 +41,12 @@ public class VecFile {
     }
 
     /**
-     * Remove the file extension from a string.
-     *
-     * @param string The input filename, including extension.
-     * @return The output filename, without extension.
-     */
-    private String removeExtension(String string){
-        return string.replaceFirst("[.][^.]+$", "");
-    }
-
-    /**
      * Creates an internal VEC class from a file.
      *
      * @param directory The directory of the VEC file that is being imported.
-     * @param filename The filename of the VEC file that is being imported.
+     * @param filename  The filename of the VEC file that is being imported.
      */
-    public VecFile(String directory, String filename) throws VecCommandException, IOException{
+    public VecFile(String directory, String filename) throws VecCommandException, IOException {
         this.directory = directory;
         this.filename = filename;
         isSaved = true;
@@ -70,7 +60,7 @@ public class VecFile {
      *
      * @param filename The filename of the VEC file that is being created.
      */
-    public VecFile(String filename){
+    public VecFile(String filename) {
         this.directory = null;
         this.filename = filename;
         isSaved = false;
@@ -78,27 +68,33 @@ public class VecFile {
     }
 
     /**
+     * Remove the file extension from a string.
+     *
+     * @param string The input filename, including extension.
+     * @return The output filename, without extension.
+     */
+    private String removeExtension(String string) {
+        return string.replaceFirst("[.][^.]+$", "");
+    }
+
+    /**
      * Adds a new command to the end of the command array.
      *
      * @param command The new command.
      */
-    public void addCommand(VecCommand command){
+    public void addCommand(VecCommand command) {
 
         //Optimises colour command creation and updates latest colours.
-        if (command instanceof PenCommand){
-            if (((PenCommand) command).getColour().equals(latestPenColour)){
+        if (command instanceof PenCommand) {
+            if (((PenCommand) command).getColour().equals(latestPenColour)) {
                 return;
-            }
-            else {
+            } else {
                 latestPenColour = ((PenCommand) command).getColour();
             }
-        }
-
-        else if (command instanceof FillCommand){
-            if (((FillCommand) command).getColour().equals(latestFillColour)){
+        } else if (command instanceof FillCommand) {
+            if (((FillCommand) command).getColour().equals(latestFillColour)) {
                 return;
-            }
-            else {
+            } else {
                 latestFillColour = ((FillCommand) command).getColour();
             }
         }
@@ -110,19 +106,17 @@ public class VecFile {
     /**
      * Removes the last command in the command array, and any colour commands preceding it.
      */
-    public void undoLatestCommand(){
-        if (!commands.isEmpty()){
+    public void undoLatestCommand() {
+        if (!commands.isEmpty()) {
             commands.remove(commands.size() - 1);
 
-            while (!commands.isEmpty()){
+            while (!commands.isEmpty()) {
                 VecCommand latestCommand = commands.get(commands.size() - 1);
-                if (latestCommand instanceof PenCommand){
+                if (latestCommand instanceof PenCommand) {
                     commands.remove(commands.size() - 1);
-                }
-                else if (latestCommand instanceof FillCommand){
+                } else if (latestCommand instanceof FillCommand) {
                     commands.remove(commands.size() - 1);
-                }
-                else {
+                } else {
                     break;
                 }
             }
@@ -138,11 +132,10 @@ public class VecFile {
      * @throws IOException Thrown if an error occurs while writing to file.
      */
     public void save() throws IOException {
-        if (directory != null){
+        if (directory != null) {
             exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
             isSaved = true;
-        }
-        else {
+        } else {
             throw new IOException("New file must have a directory specified with saveAs.");
         }
 
@@ -152,7 +145,7 @@ public class VecFile {
      * Saves the current state of the VecFile to a new filepath.
      *
      * @param directory The directory where the file will be saved to.
-     * @param filename The name of the file, not including extension.
+     * @param filename  The name of the file, not including extension.
      */
     public void saveAs(String directory, String filename) throws IOException {
         exportToFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
@@ -168,10 +161,9 @@ public class VecFile {
      * @param file The file to be saved to.
      */
     public void saveAs(File file) throws IOException {
-        if (file.toString().endsWith(VecFile.FILE_EXTENSION)){
+        if (file.toString().endsWith(VecFile.FILE_EXTENSION)) {
             exportToFile(file);
-        }
-        else {
+        } else {
             exportToFile(new File(String.format("%s.%s", file.getAbsolutePath(), VecFile.FILE_EXTENSION)));
         }
 
@@ -207,7 +199,7 @@ public class VecFile {
      *
      * @param file The file being imported.
      * @throws VecCommandException Thrown if an issue occurs while parsing a command.
-     * @throws IOException Thrown if an issue occurs during file IO.
+     * @throws IOException         Thrown if an issue occurs during file IO.
      */
     private void open(File file) throws VecCommandException, IOException {
         importFromFile(file);
@@ -217,9 +209,9 @@ public class VecFile {
      * Imports a vec file.
      *
      * @param directory The directory file being imported.
-     * @param filename The name without extension of the file being imported.
+     * @param filename  The name without extension of the file being imported.
      * @throws VecCommandException Thrown if an issue occurs while parsing a command.
-     * @throws IOException Thrown if an issue occurs during file IO.
+     * @throws IOException         Thrown if an issue occurs during file IO.
      */
     private void open(String directory, String filename) throws VecCommandException, IOException {
         importFromFile(new File(String.format("%s/%s.%s", directory, filename, FILE_EXTENSION)));
@@ -230,13 +222,13 @@ public class VecFile {
      *
      * @param file The vec file.
      * @throws VecCommandException Thrown if an issue occurs while parsing a command.
-     * @throws IOException Thrown if an issue occurs during file IO.
+     * @throws IOException         Thrown if an issue occurs during file IO.
      */
-    private void importFromFile(File file) throws VecCommandException, IOException{
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+    private void importFromFile(File file) throws VecCommandException, IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
 
-            while (line != null){
+            while (line != null) {
                 VecCommand command = parseVecCommand(line);
                 commands.add(command);
                 line = reader.readLine();
@@ -252,35 +244,21 @@ public class VecFile {
      * @throws VecCommandException Thrown if an invalid vec command string is input.
      */
     private VecCommand parseVecCommand(String commandString) throws VecCommandException {
-        if (commandString.startsWith(PlotCommand.COMMAND_NAME)){
+        if (commandString.startsWith(PlotCommand.COMMAND_NAME)) {
             return PlotCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(LineCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(LineCommand.COMMAND_NAME)) {
             return LineCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(RectangleCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(RectangleCommand.COMMAND_NAME)) {
             return RectangleCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(EllipseCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(EllipseCommand.COMMAND_NAME)) {
             return EllipseCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(PolygonCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(PolygonCommand.COMMAND_NAME)) {
             return PolygonCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(PenCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(PenCommand.COMMAND_NAME)) {
             return PenCommand.fromString(commandString);
-        }
-
-        else if (commandString.startsWith(FillCommand.COMMAND_NAME)){
+        } else if (commandString.startsWith(FillCommand.COMMAND_NAME)) {
             return FillCommand.fromString(commandString);
-        }
-
-        else {
+        } else {
             throw new VecCommandException("Attempted to convert string without a valid identifier to VecCommand.");
         }
     }
@@ -288,24 +266,22 @@ public class VecFile {
     /**
      * Updates the latest colour fields with the current values derived from the commands array.
      */
-    private void updateLatestColours(){
+    private void updateLatestColours() {
         boolean isPenColourFound = false;
         boolean isFillColourFound = false;
 
-        for (int i = commands.size() - 1; i >= 0; i--){
+        for (int i = commands.size() - 1; i >= 0; i--) {
             VecCommand command = commands.get(i);
 
-            if (!isPenColourFound && command instanceof PenCommand){
+            if (!isPenColourFound && command instanceof PenCommand) {
                 latestPenColour = ((PenCommand) command).getColour();
                 isPenColourFound = true;
-            }
-
-            else if (!isFillColourFound && command instanceof FillCommand){
+            } else if (!isFillColourFound && command instanceof FillCommand) {
                 latestFillColour = ((FillCommand) command).getColour();
                 isFillColourFound = true;
             }
 
-            if (isPenColourFound && isFillColourFound){
+            if (isPenColourFound && isFillColourFound) {
                 break;
             }
         }
@@ -316,7 +292,7 @@ public class VecFile {
      *
      * @return The name of the VEC file.
      */
-    public String getFilename(){
+    public String getFilename() {
         return filename;
     }
 
@@ -325,7 +301,7 @@ public class VecFile {
      *
      * @return The commands of the VEC file.
      */
-    public ArrayList<VecCommand> getCommands(){
+    public ArrayList<VecCommand> getCommands() {
         return commands;
     }
 
@@ -334,7 +310,7 @@ public class VecFile {
      *
      * @return The colour.
      */
-    public String getLatestPenColour(){
+    public String getLatestPenColour() {
         return latestPenColour;
     }
 
@@ -343,7 +319,7 @@ public class VecFile {
      *
      * @return The colour or the string 'OFF'.
      */
-    public String getLatestFillColour(){
+    public String getLatestFillColour() {
         return latestFillColour;
     }
 
@@ -352,7 +328,7 @@ public class VecFile {
      *
      * @return The boolean corresponding to whether the saved file is up-to-date.
      */
-    public boolean isSaved(){
+    public boolean isSaved() {
         return isSaved;
     }
 
@@ -361,7 +337,7 @@ public class VecFile {
      *
      * @return The boolean corresponding to whether an external file exists.
      */
-    public boolean isNewFile(){
+    public boolean isNewFile() {
         return directory == null;
     }
 

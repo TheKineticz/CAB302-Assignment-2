@@ -8,14 +8,14 @@ import java.awt.*;
  */
 class VecToolbar extends JToolBar {
 
+    private static final int HEIGHT = 80;
     VecToolSelector toolSelector;
     VecColourSelector colourSelector;
-    private static final int HEIGHT = 80;
 
     /**
      * Constructs a new VecToolbar.
      */
-    VecToolbar(){
+    VecToolbar() {
         setFloatable(false);
         setLayout(new FlowLayout(FlowLayout.LEFT));
 

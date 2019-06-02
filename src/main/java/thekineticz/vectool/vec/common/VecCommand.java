@@ -12,7 +12,7 @@ public abstract class VecCommand {
      *
      * @param commandName The string name of the command.
      */
-    public VecCommand(String commandName){
+    public VecCommand(String commandName) {
         this.commandName = commandName;
     }
 
@@ -28,7 +28,7 @@ public abstract class VecCommand {
      *
      * @return The command name of the VecCommand.
      */
-    public String getCommandName(){
+    public String getCommandName() {
         return commandName;
     }
 
@@ -38,7 +38,7 @@ public abstract class VecCommand {
      * @return The VecCommand in it's full string form.
      */
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%s %s", commandName, getArgs());
     }
 }

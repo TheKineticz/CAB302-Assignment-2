@@ -1,7 +1,8 @@
 package thekineticz.vectool.vec.commands;
 
 import thekineticz.vectool.exception.VecCommandException;
-import thekineticz.vectool.vec.common.*;
+import thekineticz.vectool.vec.common.ColourHexMatcher;
+import thekineticz.vectool.vec.common.VecCommand;
 
 /**
  * The internal structure of a pen vec command.
@@ -22,29 +23,11 @@ public class PenCommand extends VecCommand {
     public PenCommand(String colour) throws VecCommandException {
         super(COMMAND_NAME);
 
-        if (!ColourHexMatcher.isValid(colour)){
+        if (!ColourHexMatcher.isValid(colour)) {
             throw new VecCommandException(String.format("Invalid colour argument '%s' for %s command.", colour, COMMAND_NAME));
         }
 
         this.colour = colour;
-    }
-
-    /**
-     * Gets the colour of the pen.
-     *
-     * @return The colour of the pen.
-     */
-    public String getColour(){
-        return colour;
-    }
-
-    /**
-     * Inherited alias to getColour.
-     *
-     * @return The colour of the pen.
-     */
-    public String getArgs(){
-        return getColour();
     }
 
     /**
@@ -57,14 +40,32 @@ public class PenCommand extends VecCommand {
     public static PenCommand fromString(String command) throws VecCommandException {
         String[] commandArray = command.split(" ");
 
-        if (commandArray.length - 1 != REQUIRED_ARGUMENTS){
+        if (commandArray.length - 1 != REQUIRED_ARGUMENTS) {
             throw new VecCommandException(String.format("%s command string must contain exactly %d arguments", COMMAND_NAME, REQUIRED_ARGUMENTS));
         }
 
-        if (!commandArray[0].equals(COMMAND_NAME)){
+        if (!commandArray[0].equals(COMMAND_NAME)) {
             throw new VecCommandException("Attempted to generate PenCommand from string with incorrect identifier.");
         }
 
         return new PenCommand(commandArray[1]);
+    }
+
+    /**
+     * Gets the colour of the pen.
+     *
+     * @return The colour of the pen.
+     */
+    public String getColour() {
+        return colour;
+    }
+
+    /**
+     * Inherited alias to getColour.
+     *
+     * @return The colour of the pen.
+     */
+    public String getArgs() {
+        return getColour();
     }
 }

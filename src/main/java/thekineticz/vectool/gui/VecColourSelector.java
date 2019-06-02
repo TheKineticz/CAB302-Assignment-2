@@ -57,7 +57,7 @@ class VecColourSelector extends JToolBar {
      * @param colour The colour.
      */
     void setFillColour(Color colour){
-        penColourButton.setColour(colour);
+        fillColourButton.setColour(colour);
     }
 
     /**
@@ -144,7 +144,7 @@ class VecColourSelector extends JToolBar {
          *
          * @param colour The colour.
          */
-        public void setColour(Color colour){
+        void setColour(Color colour){
             button.setBackground(colour);
             currentColour = colour;
         }

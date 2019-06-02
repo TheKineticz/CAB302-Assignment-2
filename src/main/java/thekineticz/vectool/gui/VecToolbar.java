@@ -10,28 +10,33 @@ class VecToolbar extends JToolBar {
 
     VecToolbar(){
         setFloatable(false);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
         //Set up tool selector
         toolSelector = new VecToolSelector();
 
         JPanel toolSelectorPanel = new JPanel();
-        toolSelectorPanel.setLayout(new BoxLayout(toolSelectorPanel, BoxLayout.Y_AXIS));
-        toolSelectorPanel.add(toolSelector);
-        toolSelectorPanel.add(new JLabel("Tools"));
-
-        add(toolSelectorPanel);
-        addSeparator();
+        toolSelectorPanel.setPreferredSize(new Dimension(150, 80));
+        toolSelectorPanel.setLayout(new BorderLayout());
+        toolSelectorPanel.add(toolSelector, BorderLayout.CENTER);
+        JLabel toolLabel = new JLabel("Tools", JLabel.CENTER);
+        toolLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        toolSelectorPanel.add(toolLabel, BorderLayout.SOUTH);
 
         //Set up colour selector
         colourSelector = new VecColourSelector();
 
         JPanel colourSelectorPanel = new JPanel();
-        colourSelectorPanel.setLayout(new BoxLayout(colourSelectorPanel, BoxLayout.Y_AXIS));
-        colourSelectorPanel.add(colourSelector);
-        colourSelectorPanel.add(new JLabel("Colours"));
+        colourSelectorPanel.setPreferredSize(new Dimension(100, 80));
+        colourSelectorPanel.setLayout(new BorderLayout());
+        colourSelectorPanel.add(colourSelector, BorderLayout.CENTER);
+        JLabel colourLabel = new JLabel("Colours", JLabel.CENTER);
+        colourLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        colourSelectorPanel.add(colourLabel, BorderLayout.SOUTH);
 
-        add(colourSelectorPanel);
+        add(toolSelectorPanel);
         addSeparator();
+        add(colourSelectorPanel);
 
         setVisible(true);
     }

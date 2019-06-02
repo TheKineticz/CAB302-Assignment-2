@@ -38,8 +38,26 @@ class VecColourSelector extends JToolBar {
      * Resets the colour selector buttons to their default colours.
      */
     void reset(){
-        penColourButton.setColour(penColourButton.DEFAULT_COLOUR);
-        fillColourButton.setColour(fillColourButton.DEFAULT_COLOUR);
+        setPenColour(penColourButton.DEFAULT_COLOUR);
+        setFillColour(fillColourButton.DEFAULT_COLOUR);
+    }
+
+    /**
+     * Sets the pen colour.
+     *
+     * @param colour The colour.
+     */
+    void setPenColour(Color colour){
+        penColourButton.setColour(colour);
+    }
+
+    /**
+     * Sets the fill colour.
+     *
+     * @param colour The colour.
+     */
+    void setFillColour(Color colour){
+        penColourButton.setColour(colour);
     }
 
     /**

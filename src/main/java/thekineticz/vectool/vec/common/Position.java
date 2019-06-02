@@ -2,11 +2,10 @@ package thekineticz.vectool.vec.common;
 
 /**
  * Class representing a position pair.
- * @param <E> The type of the pair.
  */
-public class Position<E> {
-    private final E x;
-    private final E y;
+public class Position {
+    private final Double x;
+    private final Double y;
 
     /**
      * Creates a new position pair.
@@ -14,7 +13,7 @@ public class Position<E> {
      * @param x The first element of the pair.
      * @param y The second element of the pair.
      */
-    public Position(E x, E y){
+    public Position(Double x, Double y){
         this.x = x;
         this.y = y;
     }
@@ -24,7 +23,7 @@ public class Position<E> {
      *
      * @return The first element of the pair.
      */
-    public E getX(){
+    public Double getX(){
         return x;
     }
 
@@ -33,7 +32,7 @@ public class Position<E> {
      *
      * @return The second element of the pair.
      */
-    public E getY(){
+    public Double getY(){
         return y;
     }
 
@@ -61,6 +60,16 @@ public class Position<E> {
 
         Position pos2 = (Position) o;
         return x.equals(pos2.x) && y.equals(pos2.y);
+    }
+
+    /**
+     * Get the euclidean distance between two positions.
+     *
+     * @param pos2 Another position.
+     * @return The distance between the points.
+     */
+    public double getDistance(Position pos2){
+        return Math.sqrt(Math.pow(pos2.getX() - getX(), 2) + Math.pow(pos2.getY() - getY(), 2));
     }
 
     /**

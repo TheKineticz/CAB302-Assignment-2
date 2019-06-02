@@ -66,6 +66,20 @@ public class VecToolGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Removes an existing canvas from the canvas panel.
+     */
+    private void removeCanvas(){
+        canvasPanel.remove(vecCanvas);
+        canvasPanel.revalidate();
+        canvasPanel.repaint();
+    }
+
+    /**
+     * Creates a new canvas tied to a VecFile.
+     *
+     * @param vecFile The VecFile to draw on the canvas.
+     */
     private void createCanvas(VecFile vecFile){
         vecCanvas = new VecCanvas(vecFile);
         canvasPanel.add(vecCanvas);
@@ -174,7 +188,15 @@ public class VecToolGUI extends JFrame {
      * Prompt to save existing file and create a new VecFile.
      */
     private void createNewVecFile(){
-        closeVecFile();
+        if (vecFile != null && !vecFile.isSaved()){
+            if (!promptToSave()){
+                return;
+            }
+        }
+
+        if (vecCanvas != null){
+            removeCanvas();
+        }
 
         vecFile = new VecFile(DEFAULT_FILENAME);
         setTitle(String.format("%s - %s", vecFile.getFilename(), TITLE));
@@ -191,14 +213,22 @@ public class VecToolGUI extends JFrame {
      * Prompt to save existing file and start prompt to open an existing vec file.
      */
     private void openVecFile(){
-        closeVecFile();
-
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileFilter(FILE_FILTER);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = fileChooser.getSelectedFile();
+
+            if (vecFile != null && !vecFile.isSaved()){
+                if (!promptToSave()){
+                    return;
+                }
+            }
+
+            if (vecCanvas != null){
+                removeCanvas();
+            }
 
             try {
                 vecFile = new VecFile(file);
@@ -243,9 +273,7 @@ public class VecToolGUI extends JFrame {
         }
 
         if (vecCanvas != null){
-            canvasPanel.remove(vecCanvas);
-            canvasPanel.revalidate();
-            canvasPanel.repaint();
+            removeCanvas();
         }
 
         vecFile = null;

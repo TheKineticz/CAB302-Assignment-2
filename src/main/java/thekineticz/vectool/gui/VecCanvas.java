@@ -48,6 +48,7 @@ class VecCanvas extends JPanel {
 
     /**
      * Overrides the paint function to draw a VecFile on the canvas during repainting.
+     * If an editor action is currently underway, a preview will also be drawn.
      *
      * @param g Graphics parameter; automatically passed during repainting.
      */
@@ -94,6 +95,7 @@ class VecCanvas extends JPanel {
 
                 drawLine(g, positions, editor.getNextPenColour());
             }
+
             else if (editor.getActiveTool() == RectangleCommand.class){
                 ArrayList<Position> positions = new ArrayList<>();
                 positions.add(editor.getPositionBuffer().get(0));
@@ -101,6 +103,7 @@ class VecCanvas extends JPanel {
 
                 drawRectangle(g, positions, editor.getNextPenColour(), editor.getNextFillColour());
             }
+
             else if (editor.getActiveTool() == EllipseCommand.class){
                 ArrayList<Position> positions = new ArrayList<>();
                 positions.add(editor.getPositionBuffer().get(0));
@@ -108,6 +111,7 @@ class VecCanvas extends JPanel {
 
                 drawEllipse(g, positions, editor.getNextPenColour(), editor.getNextFillColour());
             }
+
             else if (editor.getActiveTool() == PolygonCommand.class){
                 ArrayList<Position> positions = (ArrayList)editor.getPositionBuffer().clone();
                 positions.add(editor.getMousePosition());
@@ -166,6 +170,7 @@ class VecCanvas extends JPanel {
         int x2 = (int)Math.round(getWidth() * positions.get(1).getX());
         int y2 = (int)Math.round(getHeight() * positions.get(1).getY());
 
+        //Force (x1, y1) to be top-left and (x2, y2) to be bottom-right
         if (x1 > x2){
             //Swap x1 and x2
             x1 += x2;
@@ -202,6 +207,7 @@ class VecCanvas extends JPanel {
         int x2 = (int)Math.round(getWidth() * positions.get(1).getX());
         int y2 = (int)Math.round(getHeight() * positions.get(1).getY());
 
+        //Force (x1, y1) to be top-left and (x2, y2) to be bottom-right
         if (x1 > x2){
             //Swap x1 and x2
             x1 += x2;

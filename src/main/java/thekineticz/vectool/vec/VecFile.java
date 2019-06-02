@@ -98,11 +98,25 @@ public class VecFile {
     }
 
     /**
-     * Removes the last command in the command array.
+     * Removes the last command in the command array, and any colour commands preceding it.
      */
     public void undoLatestCommand(){
         if (!commands.isEmpty()){
             commands.remove(commands.size() - 1);
+
+            while (!commands.isEmpty()){
+                VecCommand latestCommand = commands.get(commands.size() - 1);
+                if (latestCommand instanceof PenCommand){
+                    commands.remove(commands.size() - 1);
+                }
+                else if (latestCommand instanceof FillCommand){
+                    commands.remove(commands.size() - 1);
+                }
+                else {
+                    break;
+                }
+            }
+
             updateLatestColours();
             isSaved = false;
         }

@@ -8,25 +8,36 @@ import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Tool bar class for selecting colours.
+ */
 class VecColourSelector extends JToolBar {
 
-    ColourPreviewButton penColourButton;
-    ColourPreviewButton fillColourButton;
+    ColourSelectorButton penColourButton;
+    ColourSelectorButton fillColourButton;
 
+    /**
+     * Constructs a new VecColourSelector bar.
+     */
     VecColourSelector(){
+        //Set up layout
         setFloatable(false);
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.CENTER;
 
-        penColourButton = new ColourPreviewButton("Pen", "Set the colour of the pen.", Color.BLACK, false);
-        fillColourButton = new ColourPreviewButton("Fill", "Set the shape fill colour.", null, true);
+        //Set up buttons
+        penColourButton = new ColourSelectorButton("Pen", "Set the colour of the pen.", Color.BLACK, false);
+        fillColourButton = new ColourSelectorButton("Fill", "Set the shape fill colour.", null, true);
 
         add(penColourButton, constraints);
         add(fillColourButton, constraints);
     }
 
-    private class ColourPreviewButton extends JPanel implements ActionListener {
+    /**
+     * Inner class for the custom colour preview/selector buttons.
+     */
+    private class ColourSelectorButton extends JPanel implements ActionListener {
 
         private final Dimension BUTTON_SIZE = new Dimension(32, 32);
         private final Color DEFAULT_COLOUR;
@@ -39,17 +50,30 @@ class VecColourSelector extends JToolBar {
         JButton button;
         JLabel label;
 
-        ColourPreviewButton(String label, String tooltip, Color defaultColour, boolean canBeNull){
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            setBorder(new EmptyBorder(5, 5, 5, 5));
+        /**
+         * Create a new ColourSelectorButton.
+         *
+         * @param label The label that will be drawn under the colour button.
+         * @param tooltip The tooltip that will be displayed when hovering over the button.
+         * @param defaultColour The default colour for the object.
+         * @param canBeNull Whether the colour argument can be null (OFF).
+         */
+        ColourSelectorButton(String label, String tooltip, Color defaultColour, boolean canBeNull){
+
             DEFAULT_COLOUR = defaultColour;
             this.canBeNull = canBeNull;
+
+            //Set up layout
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
+            setOpaque(false);
 
             //Set up colour preview/changer button
             button = new JButton();
             button.setToolTipText(String.format("<html><p>%s</p><p>Right-click to reset to default.</p></html>", tooltip));
             setColour(DEFAULT_COLOUR);
 
+            //Force size
             button.setMinimumSize(BUTTON_SIZE);
             button.setMaximumSize(BUTTON_SIZE);
             button.setPreferredSize(BUTTON_SIZE);
@@ -60,6 +84,7 @@ class VecColourSelector extends JToolBar {
             button.setBorder(STANDARD_BUTTON_BORDER);
             button.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
+            //Add custom mouse listeners for visual effects
             button.addActionListener(this);
             button.addMouseListener(new MouseAdapter() {
                 @Override
@@ -88,15 +113,30 @@ class VecColourSelector extends JToolBar {
             add(this.label);
         }
 
+        /**
+         * Set the colour of the colour selector.
+         *
+         * @param colour The colour.
+         */
         public void setColour(Color colour){
             button.setBackground(colour);
             currentColour = colour;
         }
 
+        /**
+         * Gets the colour of the colour selector.
+         *
+         * @return The colour of the colour selector.
+         */
         public Color getColour(){
             return currentColour;
         }
 
+        /**
+         * Custom action listener for starting colour selection dialog on button click.
+         *
+         * @param event The event that occurred.
+         */
         public void actionPerformed(ActionEvent event){
             Color newColour = JColorChooser.showDialog(null, "Select colour", button.getBackground());
             if (newColour != null){

@@ -8,6 +8,7 @@ import java.awt.*;
  */
 class VecToolSelector extends JToolBar {
 
+    ButtonGroup tools = new ButtonGroup();
     JToggleButton plotToolButton;
     JToggleButton lineToolButton;
     JToggleButton rectangleToolButton;
@@ -23,8 +24,6 @@ class VecToolSelector extends JToolBar {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.CENTER;
-
-        ButtonGroup tools = new ButtonGroup();
 
         //Set up plot button
         plotToolButton = new JToggleButton(new ImageIcon(getClass().getResource("plot.png")));

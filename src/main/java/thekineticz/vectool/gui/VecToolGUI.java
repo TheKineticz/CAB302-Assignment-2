@@ -259,10 +259,6 @@ public class VecToolGUI extends JFrame {
         JMenu editMenu;
         JMenuItem undoLastButton;
 
-        JMenu windowMenu;
-        JCheckBoxMenuItem toolbarWindowButton;
-        JCheckBoxMenuItem colourPickerWindowButton;
-
         /**
          * Creates a new menu bar.
          */

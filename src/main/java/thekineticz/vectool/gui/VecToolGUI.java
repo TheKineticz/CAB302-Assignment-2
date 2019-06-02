@@ -361,6 +361,7 @@ public class VecToolGUI extends JFrame {
             }
             else if (event.getSource() == undoLastButton){
                 vecFile.undoLatestCommand();
+                vecCanvas.repaint();
                 undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
             }
             else if (event.getSource() == exitButton){

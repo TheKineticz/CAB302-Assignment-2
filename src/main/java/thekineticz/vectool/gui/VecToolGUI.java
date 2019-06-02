@@ -5,7 +5,6 @@ import thekineticz.vectool.exception.*;
 import thekineticz.vectool.vec.VecFile;
 import thekineticz.vectool.vec.commands.*;
 import thekineticz.vectool.vec.common.Position;
-import thekineticz.vectool.vec.common.VecCommand;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -407,7 +406,7 @@ public class VecToolGUI extends JFrame {
     }
 
     /**
-     * Listener class for editing a VecCanvas.
+     * Inner class for handing the editing of a VecCanvas.
      */
     class VecCanvasEditor implements MouseListener, MouseMotionListener {
 
@@ -418,17 +417,54 @@ public class VecToolGUI extends JFrame {
 
         private ArrayList<Position> positionBuffer;
 
+        /**
+         * Create a new VecCanvasEditor object.
+         */
         VecCanvasEditor(){
             previousTool = null;
             positionBuffer = new ArrayList<>();
         }
 
+        /**
+         * Gets the drawing tool that is current active.
+         *
+         * @return The VecCommand class corresponding to the currently active tool.
+         */
         Class getActiveTool() { return activeTool; }
+
+        /**
+         * Gets the internal position buffer.
+         *
+         * @return The internal position buffer of a VecCommand being formed.
+         */
         ArrayList<Position> getPositionBuffer(){ return positionBuffer; }
+
+        /**
+         * Get the position of the mouse on the canvas.
+         *
+         * @return The position of the mouse on the canvas.
+         */
         Position getMousePosition(){ return mousePosition; }
+
+        /**
+         * Get the pen colour as currently selected in the colour selector.
+         *
+         * @return The pen colour.
+         */
         Color getNextPenColour(){ return toolbar.colourSelector.getPenColour(); }
+
+        /**
+         * Get the fill colour as currently selected in the colour selector.
+         *
+         * @return The fill colour.
+         */
         Color getNextFillColour(){ return toolbar.colourSelector.getFillColour(); }
 
+        /**
+         * Add a plot command to the VecFile based on a position and the current colour values.
+         *
+         * @param position The position of the plot.
+         */
         private void addPlot(Position position){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
@@ -441,6 +477,9 @@ public class VecToolGUI extends JFrame {
             vecCanvas.repaint();
         }
 
+        /**
+         * Add a line command to the VecFile based on the internal position buffer and the current colour values.
+         */
         private void addLine(){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
@@ -453,6 +492,9 @@ public class VecToolGUI extends JFrame {
             vecCanvas.repaint();
         }
 
+        /**
+         * Add a rectangle command to the VecFile based on the internal position buffer and the current colour values.
+         */
         private void addRectangle(){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
@@ -466,6 +508,9 @@ public class VecToolGUI extends JFrame {
             vecCanvas.repaint();
         }
 
+        /**
+         * Add an ellipse command to the VecFile based on the internal position buffer and the current colour values.
+         */
         private void addEllipse(){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
@@ -479,6 +524,9 @@ public class VecToolGUI extends JFrame {
             vecCanvas.repaint();
         }
 
+        /**
+         * Add a polygon command to the VecFile based on the internal position buffer and the current colour values.
+         */
         private void addPolygon(){
             try {
                 vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
@@ -492,6 +540,13 @@ public class VecToolGUI extends JFrame {
             vecCanvas.repaint();
         }
 
+        /**
+         * Performs an action based on a mousePressed event.
+         * Responsible for building the initial position buffer for most commands.
+         * In the case of a polygon command, each mouse event adds a new vertex.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mousePressed(MouseEvent event){
             if (previousTool != null && !previousTool.equals(activeTool)){
@@ -532,6 +587,12 @@ public class VecToolGUI extends JFrame {
             }
         }
 
+        /**
+         * Performs an action based on a mouseReleased event.
+         * Responsible for completing the internal position buffer for most commands.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseReleased(MouseEvent event){
             Position eventPosition = new Position((double)event.getX() / vecCanvas.getWidth(), (double)event.getY() / vecCanvas.getHeight());
@@ -556,6 +617,13 @@ public class VecToolGUI extends JFrame {
             }
         }
 
+        /**
+         * Performs an action based on a mouseDragged event.
+         * Responsible for updating the previews of most commands.
+         * In the case of a Plot command, each drag event adds a new plot at the position of the mouse.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseDragged(MouseEvent event){
             mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
@@ -583,6 +651,12 @@ public class VecToolGUI extends JFrame {
             }
         }
 
+        /**
+         * Performs an action based on a mouseMoved event.
+         * Responsible for updating the preview of the polygon command.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseMoved(MouseEvent event){
             mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
@@ -593,13 +667,27 @@ public class VecToolGUI extends JFrame {
             }
         }
 
-        //Unused interface functions
+        /**
+         * Unused interface function.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseEntered(MouseEvent event){}
 
+        /**
+         * Unused interface function.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseExited(MouseEvent event){}
 
+        /**
+         * Unused interface function.
+         *
+         * @param event A MouseEvent (automatically passed)
+         */
         @Override
         public void mouseClicked(MouseEvent event){}
     }

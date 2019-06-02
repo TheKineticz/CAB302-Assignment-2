@@ -39,9 +39,9 @@ class ColourHexConverter {
     static String rgb2hex(Color colour){
         if (colour != null){
             return String.format("#%s%s%s",
-                    Integer.toHexString(colour.getRed()),
-                    Integer.toHexString(colour.getGreen()),
-                    Integer.toHexString(colour.getBlue()));
+                    String.format("%02X", colour.getRed()),
+                    String.format("%02X", colour.getGreen()),
+                    String.format("%02X", colour.getBlue()));
         }
         else {
             return FillCommand.FILL_OFF;

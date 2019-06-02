@@ -3,11 +3,15 @@ package thekineticz.vectool.gui;
 import thekineticz.vectool.VecTool;
 import thekineticz.vectool.exception.*;
 import thekineticz.vectool.vec.VecFile;
+import thekineticz.vectool.vec.commands.*;
+import thekineticz.vectool.vec.common.Position;
+import thekineticz.vectool.vec.common.VecCommand;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -81,7 +85,11 @@ public class VecToolGUI extends JFrame {
      * @param vecFile The VecFile to draw on the canvas.
      */
     private void createCanvas(VecFile vecFile){
-        vecCanvas = new VecCanvas(vecFile);
+        VecCanvasEditor editor = new VecCanvasEditor();
+
+        vecCanvas = new VecCanvas(vecFile, editor);
+        vecCanvas.addMouseListener(editor);
+        vecCanvas.addMouseMotionListener(editor);
         canvasPanel.add(vecCanvas);
         canvasPanel.revalidate();
     }
@@ -396,5 +404,203 @@ public class VecToolGUI extends JFrame {
                 exitGUI();
             }
         }
+    }
+
+    /**
+     * Listener class for editing a VecCanvas.
+     */
+    class VecCanvasEditor implements MouseListener, MouseMotionListener {
+
+        private Class previousTool;
+        private Class activeTool;
+        private Position mousePosition;
+        private static final int SNAP_THRESHOLD = 10;
+
+        private ArrayList<Position> positionBuffer;
+
+        VecCanvasEditor(){
+            previousTool = null;
+            positionBuffer = new ArrayList<>();
+        }
+
+        Class getActiveTool() { return activeTool; }
+        ArrayList<Position> getPositionBuffer(){ return positionBuffer; }
+        Position getMousePosition(){ return mousePosition; }
+        Color getNextPenColour(){ return toolbar.colourSelector.getPenColour(); }
+        Color getNextFillColour(){ return toolbar.colourSelector.getFillColour(); }
+
+        private void addPlot(Position position){
+            try {
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new PlotCommand(position));
+            }
+            catch (VecCommandException e){
+                e.printStackTrace();
+            }
+
+            vecCanvas.repaint();
+        }
+
+        private void addLine(){
+            try {
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new LineCommand((ArrayList)positionBuffer.clone()));
+            }
+            catch (VecCommandException e){
+                e.printStackTrace();
+            }
+
+            vecCanvas.repaint();
+        }
+
+        private void addRectangle(){
+            try {
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new RectangleCommand((ArrayList)positionBuffer.clone()));
+            }
+            catch (VecCommandException e){
+                e.printStackTrace();
+            }
+
+            vecCanvas.repaint();
+        }
+
+        private void addEllipse(){
+            try {
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new EllipseCommand((ArrayList)positionBuffer.clone()));
+            }
+            catch (VecCommandException e){
+                e.printStackTrace();
+            }
+
+            vecCanvas.repaint();
+        }
+
+        private void addPolygon(){
+            try {
+                vecFile.addCommand(new PenCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getPenColour())));
+                vecFile.addCommand(new FillCommand(ColourHexConverter.rgb2hex(toolbar.colourSelector.getFillColour())));
+                vecFile.addCommand(new PolygonCommand((ArrayList)positionBuffer.clone()));
+            }
+            catch (VecCommandException e){
+                e.printStackTrace();
+            }
+
+            vecCanvas.repaint();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent event){
+            if (previousTool != null && !previousTool.equals(activeTool)){
+                positionBuffer.clear();
+            }
+
+            Position eventPosition = new Position((double)event.getX() / vecCanvas.getWidth(), (double)event.getY() / vecCanvas.getHeight());
+
+            if (toolbar.toolSelector.plotToolButton.isSelected()){
+                previousTool = PlotCommand.class;
+                activeTool = PlotCommand.class;
+                addPlot(eventPosition);
+            }
+            else if (toolbar.toolSelector.lineToolButton.isSelected()) {
+                activeTool = LineCommand.class;
+                positionBuffer.add(eventPosition);
+            }
+            else if (toolbar.toolSelector.rectangleToolButton.isSelected()) {
+                activeTool = RectangleCommand.class;
+                positionBuffer.add(eventPosition);
+            }
+            else if (toolbar.toolSelector.ellipseToolButton.isSelected()) {
+                activeTool = EllipseCommand.class;
+                positionBuffer.add(eventPosition);
+            }
+            else if (toolbar.toolSelector.polygonToolButton.isSelected()){
+                activeTool = PolygonCommand.class;
+                if (!positionBuffer.isEmpty() && eventPosition.getDistance(positionBuffer.get(0)) < (double)SNAP_THRESHOLD / getWidth()){
+                    previousTool = PolygonCommand.class;
+                    addPolygon();
+                    positionBuffer.clear();
+                }
+                else {
+                    activeTool = PolygonCommand.class;
+                    previousTool = PolygonCommand.class;
+                    positionBuffer.add(eventPosition);
+                }
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent event){
+            Position eventPosition = new Position((double)event.getX() / vecCanvas.getWidth(), (double)event.getY() / vecCanvas.getHeight());
+
+            if (toolbar.toolSelector.lineToolButton.isSelected() && positionBuffer.size() == 1) {
+                previousTool = LineCommand.class;
+                positionBuffer.add(eventPosition);
+                addLine();
+                positionBuffer.clear();
+            }
+            else if (toolbar.toolSelector.rectangleToolButton.isSelected() && positionBuffer.size() == 1) {
+                previousTool = RectangleCommand.class;
+                positionBuffer.add(eventPosition);
+                addRectangle();
+                positionBuffer.clear();
+            }
+            else if (toolbar.toolSelector.ellipseToolButton.isSelected() && positionBuffer.size() == 1) {
+                previousTool = EllipseCommand.class;
+                positionBuffer.add(eventPosition);
+                addEllipse();
+                positionBuffer.clear();
+            }
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent event){
+            mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
+
+            if (toolbar.toolSelector.plotToolButton.isSelected()){
+                activeTool = PlotCommand.class;
+                addPlot(mousePosition);
+                vecCanvas.repaint();
+            }
+            else if (toolbar.toolSelector.lineToolButton.isSelected()){
+                activeTool = LineCommand.class;
+                vecCanvas.repaint();
+            }
+            else if (toolbar.toolSelector.rectangleToolButton.isSelected()){
+                activeTool = RectangleCommand.class;
+                vecCanvas.repaint();
+            }
+            else if (toolbar.toolSelector.ellipseToolButton.isSelected()){
+                activeTool = EllipseCommand.class;
+                vecCanvas.repaint();
+            }
+            else if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()){
+                activeTool = PolygonCommand.class;
+                vecCanvas.repaint();
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent event){
+            mousePosition = new Position((double)event.getX() / vecCanvas.getWidth(),(double)event.getY() / vecCanvas.getHeight());
+
+            if (toolbar.toolSelector.polygonToolButton.isSelected() && !positionBuffer.isEmpty()){
+                activeTool = PolygonCommand.class;
+                vecCanvas.repaint();
+            }
+        }
+
+        //Unused interface functions
+        @Override
+        public void mouseEntered(MouseEvent event){}
+
+        @Override
+        public void mouseExited(MouseEvent event){}
+
+        @Override
+        public void mouseClicked(MouseEvent event){}
     }
 }

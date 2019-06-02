@@ -178,6 +178,7 @@ public class VecToolGUI extends JFrame {
         menuBar.saveFileButton.setEnabled(false);
         menuBar.saveAsFileButton.setEnabled(true);
         menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
+        toolbar.colourSelector.reset();
     }
 
     /**
@@ -205,6 +206,8 @@ public class VecToolGUI extends JFrame {
                 menuBar.saveFileButton.setEnabled(true);
                 menuBar.saveAsFileButton.setEnabled(true);
                 menuBar.undoLastButton.setEnabled(!vecFile.getCommands().isEmpty());
+                toolbar.colourSelector.setPenColour(ColourHexConverter.hex2rgb(vecFile.getLatestPenColour()));
+                toolbar.colourSelector.setFillColour(ColourHexConverter.hex2rgb(vecFile.getLatestFillColour()));
             }
             catch (VecCommandException e){
                 JOptionPane.showMessageDialog(
@@ -241,6 +244,7 @@ public class VecToolGUI extends JFrame {
         menuBar.saveFileButton.setEnabled(false);
         menuBar.saveAsFileButton.setEnabled(false);
         menuBar.undoLastButton.setEnabled(false);
+        toolbar.colourSelector.reset();
     }
 
     /**

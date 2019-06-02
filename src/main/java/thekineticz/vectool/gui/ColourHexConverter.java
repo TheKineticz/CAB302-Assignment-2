@@ -1,5 +1,6 @@
 package thekineticz.vectool.gui;
 
+import thekineticz.vectool.vec.commands.FillCommand;
 import thekineticz.vectool.vec.common.ColourHexMatcher;
 import java.awt.Color;
 
@@ -11,15 +12,18 @@ class ColourHexConverter {
     /**
      * Converts a 6-digit hexadecimal colour string to Color object.
      *
-     * @param hex The 6-digit hexadecimal colour string.
-     * @return The RGB Color object.
+     * @param hex The 6-digit hexadecimal colour string, or the FILL_OFF command.
+     * @return The RGB Color object, null if the FILL_OFF command was registered.
      */
-    public static Color hex2rgb(String hex){
+    static Color hex2rgb(String hex){
         if (ColourHexMatcher.isValid(hex)){
             return new Color(
                     Integer.valueOf(hex.substring(1, 3), 16),
                     Integer.valueOf(hex.substring(3, 5), 16),
                     Integer.valueOf(hex.substring(5, 7), 16));
+        }
+        else if (hex.equals(FillCommand.FILL_OFF)){
+            return null;
         }
         else {
             throw new IllegalArgumentException("Invalid hex colour string.");
@@ -29,13 +33,18 @@ class ColourHexConverter {
     /**
      * Converts an RGB colour object to a 6-digit hexadecimal colour string.
      *
-     * @param colour The RGB Color object.
-     * @return The 6-digit hexadecimal colour string.
+     * @param colour The RGB Color object, or null.
+     * @return The 6-digit hexadecimal colour string, or the FILL_OFF command if colour was null.
      */
-    public static String rgb2hex(Color colour){
-        return String.format("#%s%s%s",
-                Integer.toHexString(colour.getRed()),
-                Integer.toHexString(colour.getGreen()),
-                Integer.toHexString(colour.getBlue()));
+    static String rgb2hex(Color colour){
+        if (colour != null){
+            return String.format("#%s%s%s",
+                    Integer.toHexString(colour.getRed()),
+                    Integer.toHexString(colour.getGreen()),
+                    Integer.toHexString(colour.getBlue()));
+        }
+        else {
+            return FillCommand.FILL_OFF;
+        }
     }
 }

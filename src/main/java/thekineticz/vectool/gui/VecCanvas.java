@@ -101,7 +101,7 @@ class VecCanvas extends JPanel {
 
                 drawEllipse(g, positions, editor.getNextPenColour(), editor.getNextFillColour());
             } else if (editor.getActiveTool() == PolygonCommand.class) {
-                ArrayList<Position> positions = (ArrayList) editor.getPositionBuffer().clone();
+                ArrayList<Position> positions = new ArrayList<>(editor.getPositionBuffer());
                 positions.add(editor.getMousePosition());
 
                 for (int i = 1; i < positions.size(); i++) {
